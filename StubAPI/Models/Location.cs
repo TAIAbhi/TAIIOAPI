@@ -13,6 +13,7 @@ namespace StubAPI.Models
         public string area { get; set; }
         public string suburb { get; set; }     
         public string locationName { get; set; }
+        public string areaShortCode { get; set; }
 
     }
 }

@@ -15,4 +15,14 @@ namespace StubAPI.Models
        public double maxGeoLong { get; set; }
         public string cityURL { get; set; }
     }
+
+    public class FilterOptions
+    {
+        public int sequienceId { get; set; }
+        public string ddValue { get; set; }
+        public string ddText { get; set; }
+        public string filterType { get; set; }
+        public bool isSelected { get; set; }
+      
+    }
 }

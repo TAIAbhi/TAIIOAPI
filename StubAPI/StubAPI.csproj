@@ -182,6 +182,7 @@
     <Compile Include="Models\Contacts.cs" />
     <Compile Include="Models\ContactSuggestions.cs" />
     <Compile Include="Models\CustomResponseMessage.cs" />
+    <Compile Include="Models\DeleteSuggestion.cs" />
     <Compile Include="Models\Device.cs" />
     <Compile Include="Models\DiscountAndTotals.cs" />
     <Compile Include="Models\Error.cs" />

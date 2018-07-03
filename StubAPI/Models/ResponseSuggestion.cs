@@ -7,8 +7,9 @@ namespace StubAPI.Models
 {
     public class ResponseSuggestion
     {
-        
-             public bool ? showMaps { get; set; }
+        public string areaShortCode { get; set; }
+        public  string locationId { get; set; }
+        public bool ? showMaps { get; set; }
         public string contactNumber { get; set; }
         public string businessName { get; set; }
         public string businessContact { get; set; }

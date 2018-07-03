@@ -310,10 +310,10 @@ namespace StubAPI.Controllers
         }
 
 
-        [Route("api/location/{query=query}/{cityId=cityId}/{locationId=locationId}")]
+        [Route("api/location/{query=query}/{cityId=cityId}/{locationId=locationId}/{areaShortCode=areaShortCode}")]
         [AuthorizationRequired]
         [HttpGet]
-        public HttpResponseMessage GetLocation(string query, int? cityId, int? locationId)
+        public HttpResponseMessage GetLocation(string query, int? cityId, int? locationId, string AreaShortCode)
         {
             CustomDataResponseMessage custResponse = new CustomDataResponseMessage();
             DataTable dtLocation = new DataTable();
@@ -324,7 +324,7 @@ namespace StubAPI.Controllers
             UserDetailsWeb objUserDetails = new UserDetailsWeb();
             try
             {
-                dtLocation = objUserDetails.GetLocation(locationId, query, query, cityId);
+                dtLocation = objUserDetails.GetLocation(locationId, query, query, cityId, AreaShortCode);
                 IList<Location> items = dtLocation.AsEnumerable().Select(row =>
                  new Location
                  {
@@ -333,6 +333,7 @@ namespace StubAPI.Controllers
                      area = row.Field<string>("Area"),
                      city = row.Field<string>("City"),
                      suburb = row.Field<string>("Suburb"),
+                     areaShortCode= row.Field<string>("AreaShortCode")
 
                  }).ToList();
 
@@ -376,17 +377,17 @@ namespace StubAPI.Controllers
         }
 
 
-        [Route("api/suburbs/{cityId=cityId}")]
+        [Route("api/suburbs/{cityId=cityId}/{areaShortCode=areaShortCode}")]
         [AuthorizationRequired]
         [HttpGet]
-        public HttpResponseMessage GetSuburb(int? cityId)
+        public HttpResponseMessage GetSuburb(int? cityId, string areaShortCode)
         {
             CustomDataResponseMessage custResponse = new CustomDataResponseMessage();
             DataTable dtLocation = new DataTable();
             UserDetailsWeb objUserDetails = new UserDetailsWeb();
             try
             {
-                dtLocation = objUserDetails.GetSuburb(cityId);
+                dtLocation = objUserDetails.GetSuburb(cityId, areaShortCode);
                 IList<Location> items = dtLocation.AsEnumerable().Select(row =>
                  new Location
                  {
@@ -500,7 +501,7 @@ namespace StubAPI.Controllers
                     Int64.TryParse(contactSugg.businessContact, out isNumber);
                     if (contactSugg.businessContact.Length == 10 && isNumber > 0)
                     {
-                        if (objUserDetails.SaveContactSuggestions(objContactSugg.sourceId, contactSugg.contactId, contactSugg.catId.ToString(), contactSugg.subCategoryId.ToString(), contactSugg.microcategory, contactSugg.businessName, contactSugg.citiLevelBusiness, contactSugg.businessContact, contactSugg.location, contactSugg.location2, contactSugg.location3, contactSugg.comments, "", contactSugg.location4, contactSugg.location5, contactSugg.location6, contactSugg.contactComments, contactSugg.isAChain, contactSugg.platForm, contactSugg.city, contactSugg.requestID, contactSugg.usedTagSuggetion))
+                        if (objUserDetails.SaveContactSuggestions(objContactSugg.sourceId, contactSugg.contactId, contactSugg.catId.ToString(), contactSugg.subCategoryId.ToString(), contactSugg.microcategory, contactSugg.businessName, contactSugg.citiLevelBusiness, contactSugg.businessContact, contactSugg.location,  contactSugg.locationId, contactSugg.areaShortCode, contactSugg.comments, "", contactSugg.location4, contactSugg.location5, contactSugg.location6, contactSugg.contactComments, contactSugg.isAChain, contactSugg.platForm, contactSugg.city, contactSugg.requestID, contactSugg.usedTagSuggetion))
                         {
 
                             custMessage.action = "Success";
@@ -522,7 +523,7 @@ namespace StubAPI.Controllers
                 }
                 else
                 {
-                    if (objUserDetails.SaveContactSuggestions(objContactSugg.sourceId, contactSugg.contactId, contactSugg.catId.ToString(), contactSugg.subCategoryId.ToString(), contactSugg.microcategory, contactSugg.businessName, contactSugg.citiLevelBusiness, contactSugg.businessContact, contactSugg.location, contactSugg.location2, contactSugg.location3, contactSugg.comments, "", contactSugg.location4, contactSugg.location5, contactSugg.location6, contactSugg.contactComments, contactSugg.isAChain, contactSugg.platForm, contactSugg.city, contactSugg.requestID, contactSugg.usedTagSuggetion))
+                    if (objUserDetails.SaveContactSuggestions(objContactSugg.sourceId, contactSugg.contactId, contactSugg.catId.ToString(), contactSugg.subCategoryId.ToString(), contactSugg.microcategory, contactSugg.businessName, contactSugg.citiLevelBusiness, contactSugg.businessContact, contactSugg.location, contactSugg.locationId, contactSugg.areaShortCode, contactSugg.comments, "", contactSugg.location4, contactSugg.location5, contactSugg.location6, contactSugg.contactComments, contactSugg.isAChain, contactSugg.platForm, contactSugg.city, contactSugg.requestID, contactSugg.usedTagSuggetion))
                     {
 
                         custMessage.action = "Success";
@@ -796,11 +797,11 @@ namespace StubAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, custResponse);
         }
 
-        [Route("api/getsuggestionwithcount/{catId=catId}/{subCatId=subCatId}/{sugId=sugId}/{contactId=contactId}/{getall=getall}/{sourceId=sourceId}/{businessName=businessName}/{isLocal=isLocal}/{location=location}/{microcate=microcate}/{pageSize=pageSize}/{pageNumber=pageNumber}/{microName=microName}/{cityId=cityId}")]
+        [Route("api/getsuggestionwithcount/{catId=catId}/{subCatId=subCatId}/{sugId=sugId}/{contactId=contactId}/{getall=getall}/{sourceId=sourceId}/{businessName=businessName}/{isLocal=isLocal}/{location=location}/{microcate=microcate}/{pageSize=pageSize}/{pageNumber=pageNumber}/{microName=microName}/{cityId=cityId}/{areaShortCode=areaShortCode}")]
         [HttpGet]
         [AuthorizationRequired]
         [CustomExceptionFilter]
-        public HttpResponseMessage SuggestionWithCount(int? catId, int? subCatId, int? sugId, int? contactId, int? getall, int? sourceId, string businessName, bool? isLocal, string location, int? microcate, int pageSize, int pageNumber, string microName, int? cityId)
+        public HttpResponseMessage SuggestionWithCount(int? catId, int? subCatId, int? sugId, int? contactId, int? getall, int? sourceId, string businessName, bool? isLocal, string location, int? microcate, int pageSize, int pageNumber, string microName, int? cityId, string areaShortCode)
         {
             int totalNumberofRow = 0;
             string token = string.Empty;
@@ -814,7 +815,7 @@ namespace StubAPI.Controllers
             UserDetailsWeb objUserDetails = new UserDetailsWeb();
             try
             {
-                dtContact = objUserDetails.GetSuggestionWithCount(catId, subCatId, sugId, contactId, token, sourceId, businessName, isLocal, location, microcate, pageSize, pageNumber, out totalNumberofRow, microName, cityId).Tables[0];
+                dtContact = objUserDetails.GetSuggestionWithCount(catId, subCatId, sugId, contactId, token, sourceId, businessName, isLocal, location, microcate, pageSize, pageNumber, out totalNumberofRow, microName, cityId, areaShortCode).Tables[0];
                 IList<ResponseSuggestion> items = dtContact.AsEnumerable().Select(row =>
                     new ResponseSuggestion
                     {
@@ -847,7 +848,10 @@ namespace StubAPI.Controllers
                         vendorIsVerified = row.Field<bool?>("VendorIsVerified"),
                         isValid = row.Field<bool?>("IsValid"),
                         usedTagSuggetion = row.Field<bool?>("UsedTagSuggetion"),
-                        showMaps= row.Field<bool?>("ShowMaps")
+                        showMaps= row.Field<bool?>("ShowMaps"),
+                        locationId = row.Field<string>("locationId"),
+                        areaShortCode= row.Field<string>("areaShortCode")
+
                     }).ToList().OrderByDescending(a => a.tagCount).ToList();
 
                 PageInfo objPageinfo = new PageInfo();
@@ -902,7 +906,7 @@ namespace StubAPI.Controllers
                     Int64.TryParse(contactSugg.businessContact, out isNumber);
                     if (contactSugg.businessContact.Length == 10 && isNumber > 0)
                     {
-                        if (objUserDetails.UpdateContactSuggestions(contactSugg.sugId, objContactSugg.sourceId, contactSugg.contactId, contactSugg.catId.ToString(), contactSugg.subCategoryId.ToString(), contactSugg.microcategory, contactSugg.businessName, contactSugg.citiLevelBusiness, contactSugg.businessContact, contactSugg.location, contactSugg.location2, contactSugg.location3, contactSugg.comments, "", contactSugg.location4, contactSugg.location5, contactSugg.location6, contactSugg.contactComments, contactSugg.isAChain, contactSugg.platForm, contactSugg.city))
+                        if (objUserDetails.UpdateContactSuggestions(contactSugg.sugId, objContactSugg.sourceId, contactSugg.contactId, contactSugg.catId.ToString(), contactSugg.subCategoryId.ToString(), contactSugg.microcategory, contactSugg.businessName, contactSugg.citiLevelBusiness, contactSugg.businessContact, contactSugg.location, contactSugg.locationId, contactSugg.areaShortCode, contactSugg.comments, "", contactSugg.location4, contactSugg.location5, contactSugg.location6, contactSugg.contactComments, contactSugg.isAChain, contactSugg.platForm, contactSugg.city))
                         {
 
                             custMessage.action = "Success";
@@ -925,7 +929,7 @@ namespace StubAPI.Controllers
                 }
                 else
                 {
-                    if (objUserDetails.UpdateContactSuggestions(contactSugg.sugId, objContactSugg.sourceId, contactSugg.contactId, contactSugg.catId.ToString(), contactSugg.subCategoryId.ToString(), contactSugg.microcategory, contactSugg.businessName, contactSugg.citiLevelBusiness, contactSugg.businessContact, contactSugg.location, contactSugg.location2, contactSugg.location3, contactSugg.comments, "", contactSugg.location4, contactSugg.location5, contactSugg.location6, contactSugg.contactComments, contactSugg.isAChain, contactSugg.platForm, contactSugg.city))
+                    if (objUserDetails.UpdateContactSuggestions(contactSugg.sugId, objContactSugg.sourceId, contactSugg.contactId, contactSugg.catId.ToString(), contactSugg.subCategoryId.ToString(), contactSugg.microcategory, contactSugg.businessName, contactSugg.citiLevelBusiness, contactSugg.businessContact, contactSugg.location, contactSugg.locationId, contactSugg.areaShortCode, contactSugg.comments, "", contactSugg.location4, contactSugg.location5, contactSugg.location6, contactSugg.contactComments, contactSugg.isAChain, contactSugg.platForm, contactSugg.city))
                     {
 
                         custMessage.action = "Success";
@@ -1067,17 +1071,17 @@ namespace StubAPI.Controllers
         }
 
 
-        [Route("api/Locations/{locationId=locationId}/{cityId=cityId}")]
+        [Route("api/Locations/{locationId=locationId}/{cityId=cityId}/{areaShortCode=areaShortCode}")]
         [AuthorizationRequired]
         [HttpGet]
-        public HttpResponseMessage GetLocationWithSuburb(int? locationId, int? cityId)
+        public HttpResponseMessage GetLocationWithSuburb(int? locationId, int? cityId, string areaShortCode)
         {
             CustomDataResponseMessage custResponse = new CustomDataResponseMessage();
             DataTable dtLocation = new DataTable();
             UserDetailsWeb objUserDetails = new UserDetailsWeb();
             try
             {
-                dtLocation = objUserDetails.GetLocation(locationId, string.Empty, string.Empty, cityId);
+                dtLocation = objUserDetails.GetLocation(locationId, string.Empty, string.Empty, cityId, areaShortCode);
                 IList<Location> items = dtLocation.AsEnumerable().Select(row =>
                  new Location
                  {
@@ -1085,7 +1089,8 @@ namespace StubAPI.Controllers
                      locationName = row.Field<string>("LocationName"),
                      area = row.Field<string>("Area"),
                      city = row.Field<string>("City"),
-                     suburb = row.Field<string>("Suburb")
+                     suburb = row.Field<string>("Suburb"),
+                     areaShortCode= row.Field<string>("areaShortCode")
 
                  }).ToList();
                 if (items.Count > 0)
@@ -1722,8 +1727,8 @@ namespace StubAPI.Controllers
                     DataTable dtDeviceUIDList = new DataTable();
                     dtDeviceDetails = objUserDetails.GetSourcesToken().Tables[0];
                     dtDeviceUIDList= objUserDetails.GetSourcesToken().Tables[1];
-                    dtlocation = objUserDetails.GetLocation(null, "", objRequestSugg.location, objRequestSugg.cityId);
-                    int? locID = Convert.ToInt32(dtlocation.Rows[0]["LocationId"]);
+                    dtlocation = objUserDetails.GetLocation(null, "", objRequestSugg.location, objRequestSugg.cityId, "areaShortCode");
+                    int ? locID = Convert.ToInt32(dtlocation.Rows[0]["LocationId"]);
                     PushAndroidNotification(Convert.ToString(dtDeviceDetails.Rows[0]["TokenList"]), Convert.ToInt32(objRequestSugg.categoryId), Convert.ToInt32(objRequestSugg.subCategoryId), Convert.ToInt32(objRequestSugg.microcategoryId), locID, "Suggestion Request", objRequestSugg.comments,Convert.ToString(dtDeviceUIDList.Rows[0]["UIDList"]));
                     custMessage.action = "Success";
                     custMessage.message = "Record added successfully!.";
@@ -2083,6 +2088,91 @@ namespace StubAPI.Controllers
             }
         }
         #endregion
+        [Route("api/deletesuggestion")]
+        [HttpDelete]
+        [AuthorizationRequired]
+        public HttpResponseMessage DeleteSuggestion(DeleteSuggestion objContact)
+        {
+            int? uid = null;
+            string message = string.Empty;
+            CustomResponseMessageForDevice custMessage = new CustomResponseMessageForDevice();
+            UserDetailsWeb objUserDetails = new UserDetailsWeb();
+            custMessage.action = "Failure";
+            custMessage.message = "some error has occured";
+            try
+            {
+                if (objUserDetails.DeleteSuggesion(objContact.sugId, objContact.reasonForChange))
+                {
+                    custMessage.action = "Success";
+                    custMessage.message = "Record deleted successfully!.";
+                    custMessage.uid = uid;
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.ExpectationFailed, custMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                custMessage.action = "Failure";
+                custMessage.message = ex.Message;
+                SendEmail(ex.Message, "DeleteSuggestion Delete");
+                return Request.CreateResponse(HttpStatusCode.ExpectationFailed, custMessage);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, custMessage);
+        }
+
+
+        [Route("api/bindvsfilterdd/{contactId=contactId}/{suburb=suburb}/{geoCoordinates=geoCoordinates}/{address=address}/{cityId=cityId}")]
+        [AuthorizationRequired]
+        [HttpGet]
+        public HttpResponseMessage BindVSFilterDD(int contactId, string suburb, string geoCoordinates, string address, int cityId)
+        {
+            CustomDataResponseMessage custResponse = new CustomDataResponseMessage();
+            DataTable dtLocation = new DataTable();
+            UserDetailsWeb objUserDetails = new UserDetailsWeb();
+            try
+            {
+
+                dtLocation = objUserDetails.BindVSFilterDD(contactId, suburb, geoCoordinates, address, cityId);
+                IList<FilterOptions> items = dtLocation.AsEnumerable().Select(row =>
+                 new FilterOptions
+                 {
+                     sequienceId = row.Field<int>("sequienceId"),
+                     ddValue = row.Field<string>("ddValue"),                  
+                     ddText = row.Field<string>("ddText"),
+                     filterType = row.Field<string>("filterType"),
+                     isSelected = row.Field<bool>("isSelected")
+                 }).ToList();
+                if (items.Count > 0)
+                {
+                    custResponse.action = "success";
+                    custResponse.message = "";
+                    custResponse.data = items;
+                }
+                else
+                {
+                    custResponse.action = "success";
+                    custResponse.message = "No records found!";
+                    custResponse.data = items;
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                custResponse.action = "failure";
+                custResponse.message = ex.Message;
+                custResponse.data = null;
+                SendEmail(ex.Message, "BindVSFilterDD");
+                return Request.CreateResponse(HttpStatusCode.ExpectationFailed, custResponse);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, custResponse);
+
+        }
 
     }
 }

@@ -472,7 +472,7 @@ namespace StubAPI.BAL
         //    }
         //    return dtuserDtails;
         //}
-        public DataSet GetSuggestionWithCount(int? catId, int? subCatId, int? sugId, int? contactId, string token, int? sourceId, string businessName, bool? isLocal, string location, int? microcate, int pageSize, int pageNumber, out int returnTotalRows, string microName, int ? cityId)
+        public DataSet GetSuggestionWithCount(int? catId, int? subCatId, int? sugId, int? contactId, string token, int? sourceId, string businessName, bool? isLocal, string location, int? microcate, int pageSize, int pageNumber, out int returnTotalRows, string microName, int ? cityId, string areaShortCode)
         {
 
 
@@ -481,7 +481,7 @@ namespace StubAPI.BAL
             try
             {
 
-                SqlParameter[] parameters = new SqlParameter[15];
+                SqlParameter[] parameters = new SqlParameter[16];
                 parameters[0] = new SqlParameter("@CatId", catId);
                 parameters[1] = new SqlParameter("@SubCatId", subCatId);
                 parameters[2] = new SqlParameter("@ContactId", contactId);
@@ -537,6 +537,17 @@ namespace StubAPI.BAL
                     parameters[13] = new SqlParameter("@MCName", microName);
                 }
                 parameters[14] = new SqlParameter("@CityId", cityId);
+
+                
+                if (areaShortCode == "areaShortCode")
+                {
+                    parameters[15] = new SqlParameter("@AreaShortCode", DBNull.Value);
+                }
+                else
+                {
+
+                    parameters[15] = new SqlParameter("@AreaShortCode", areaShortCode);
+                }
                 string spName = "spGetSuggestion_backup";
 
                 dtuserDtails = SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters);
@@ -625,14 +636,14 @@ namespace StubAPI.BAL
             }
             return dtuserDtails;
         }
-        public DataTable GetLocation(int? locationid, string suburb, string locationName,int ? cityId)
+        public DataTable GetLocation(int? locationid, string suburb, string locationName,int ? cityId, string areaShortCode)
         {
             DataTable dtuserDtails = new DataTable();
 
             try
             {
                 string spName = "spGetLocation";
-                SqlParameter[] parameters = new SqlParameter[4];
+                SqlParameter[] parameters = new SqlParameter[5];
                 parameters[0] = new SqlParameter("@LocationId", locationid);
                 if (suburb == string.Empty)
                 {
@@ -651,7 +662,16 @@ namespace StubAPI.BAL
                     parameters[2] = new SqlParameter("@Location", locationName);
                 }
                 parameters[3] = new SqlParameter("@CityId", cityId);
+
                 
+               if (areaShortCode == "areaShortCode")
+                {
+                    parameters[4] = new SqlParameter("@AreaShortCode", DBNull.Value);
+                }
+                else
+                {
+                    parameters[4] = new SqlParameter("@AreaShortCode", areaShortCode);
+                }
                 if (SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables.Count > 0)
                 {
                     dtuserDtails = SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables[0];
@@ -1075,15 +1095,24 @@ namespace StubAPI.BAL
             }
             return result;
         }
-        public DataTable GetSuburb(int ? cityId)
+        public DataTable GetSuburb(int ? cityId, string areaShortCode)
         {
             DataTable dtuserDtails = new DataTable();
 
             try
             {
                 string spName = "spLoctionSuburb";
-                SqlParameter[] parameters = new SqlParameter[1];
+                SqlParameter[] parameters = new SqlParameter[2];
                 parameters[0] = new SqlParameter("@CityId", cityId);
+                if(areaShortCode== "areaShortCode")
+                {
+                    parameters[1] = new SqlParameter("@AreaShortCode", DBNull.Value);
+                }
+                else
+                {
+                    parameters[1] = new SqlParameter("@AreaShortCode", areaShortCode);
+                }
+                
                 if (SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables.Count > 0)
                 {
                     dtuserDtails = SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables[0];
@@ -1212,7 +1241,7 @@ namespace StubAPI.BAL
                 parameters[0] = new SqlParameter("@ContactId", ContactId);
                 parameters[1] = new SqlParameter("@NotificationID", NotificationID);
                 parameters[2] = new SqlParameter("@Done", Done);
-                parameters[2] = new SqlParameter("@Dismiss", Dismiss);
+                parameters[3] = new SqlParameter("@Dismiss", Dismiss);
                 SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters);
                
             }
@@ -1220,6 +1249,33 @@ namespace StubAPI.BAL
             {
                 result = false;
                // throw ex;
+            }
+            return result;
+        }
+        public bool DeleteSuggesion(int uid, string reasonForChange)
+        {
+            bool result = false;
+            int noOfEffectedRows = 0;
+            int outParamSave = 0;
+            try
+            {
+
+                string spName = "spDeleteContactSuggestions";
+                SqlParameter[] parameters = new SqlParameter[3];
+                parameters[0] = new SqlParameter("@SuggId", uid);            
+                parameters[1] = new SqlParameter("@IsSaved", outParamSave);
+                parameters[1].Direction = ParameterDirection.Output;
+                parameters[2] = new SqlParameter("@ReasonForChange", reasonForChange);                
+                noOfEffectedRows = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters);
+                outParamSave = parameters[1].Value == null ? 0 : Convert.ToInt32(parameters[1].Value);              
+                if (outParamSave > 0)
+                {
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return result;
         }
@@ -1295,7 +1351,55 @@ namespace StubAPI.BAL
             }
             return result;
         }
-        
+        public DataTable BindVSFilterDD(int contactId, string suburb,string geoCoordinates, string address, int cityId)
+        {
+            DataTable dtuserDtails = new DataTable();
+
+            try
+            {
+               
+                string spName = "spGetViewScreenFilterDropDownDetails";
+                SqlParameter[] parameters = new SqlParameter[5];
+                parameters[0] = new SqlParameter("@contactId", contactId);
+              
+                
+                if (suburb == "suburb")
+                {
+                    parameters[1] = new SqlParameter("@suburb", DBNull.Value);
+                }
+                else
+                {
+                    parameters[1] = new SqlParameter("@suburb", suburb);
+                }
+                if (geoCoordinates == "geoCoordinates")
+                {
+                    parameters[2] = new SqlParameter("@geoCoordinates", DBNull.Value);
+                }
+                else
+                {
+                    parameters[2] = new SqlParameter("@geoCoordinates", suburb);
+                }
+                if (address == "address")
+                {
+                    parameters[3] = new SqlParameter("@address", DBNull.Value);
+                }
+                else
+                {
+                    parameters[3] = new SqlParameter("@address", suburb);
+                }
+                parameters[4] = new SqlParameter("@cityId", cityId);
+                if (SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables.Count > 0)
+                {
+                    dtuserDtails = SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables[0];
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return dtuserDtails;
+        }
 
     }
 }

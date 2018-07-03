@@ -8,7 +8,11 @@ namespace StubAPI.Models
 {
     public class ContactSuggestions
     {
+        
+        public string locationId { get; set; }
+        public string areaShortCode { get; set; }
         public int sugId { get; set; }
+      
         public string source { get; set; }
         public string contact { get; set; }
         public int ? requestID { get; set; }
