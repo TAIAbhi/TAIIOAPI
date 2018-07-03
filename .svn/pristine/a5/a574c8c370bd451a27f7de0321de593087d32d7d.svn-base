@@ -1,0 +1,68 @@
+﻿using System;
+using System.Data;
+using System.Configuration;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using System.Web.UI.HtmlControls;
+using System.Data.SqlClient;
+using DAL;
+namespace StubAPI.BAL
+{
+    public class UserDetails
+    {
+        public UserDetails()
+        {
+            //
+            // TODO: Add constructor logic here
+            //
+        }
+        public string IsUserExists(string mobile, string emailIdAccess)
+        {
+            string result = string.Empty;
+            int noOfEffectedRows = 0;          
+            try
+            {
+                string spName = "spCheck_DuplicateUserDetails";
+                SqlParameter[] parameters = new SqlParameter[3];
+                parameters[0] = new SqlParameter("@Mobile", mobile);
+                parameters[1] = new SqlParameter("@Email", emailIdAccess);              
+                parameters[2] = new SqlParameter("@ErrorMessage", result);
+                parameters[2].Direction = ParameterDirection.Output;
+                noOfEffectedRows = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString(), CommandType.StoredProcedure, spName, parameters);
+                result = parameters[2].Value.ToString();               
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+        public bool SaveUserDetails(string userXmlData,string soruce, int userId)
+        {
+            bool result = false;
+            int noOfEffectedRows = 0;
+            try
+            {
+                string spName = "spUser_UserDetailsSave";
+                SqlParameter[] parameters = new SqlParameter[2];
+                parameters[0] = new SqlParameter("@ImportData", userXmlData);
+                parameters[1] = new SqlParameter("@ExistingUserID", userId);
+                parameters[1] = new SqlParameter("@Source", soruce);                
+                
+                noOfEffectedRows = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString(), CommandType.StoredProcedure, spName, parameters);
+                if (noOfEffectedRows > 0)
+                {
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;               
+            }
+            return result;
+        }
+    }
+}

@@ -1,0 +1,283 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using StubAPI.Models;
+using System.Web.Configuration;
+namespace StubAPI.Controllers
+{
+    public class ValuesController : ApiController
+    {
+        // GET api/values
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "value1", "value2" };
+        }
+
+        // GET api/values/5
+        public string Get(int id)
+        {
+            return "value";
+        }
+
+        // POST api/values
+        public void Post([FromBody]string value)
+        {
+        }
+
+        // PUT api/values/5
+        public void Put(int id, [FromBody]string value)
+        {
+        }
+
+        // DELETE api/values/5
+        public void Delete(int id)
+        {
+        }
+        [HttpPost]
+        public string PostUserDetails([FromBody] User ApiRequestModel)
+        {
+            string errorMessage = string.Empty;
+
+            errorMessage = "User record added successfuly.";
+            return errorMessage;
+
+        }
+        //[HttpPost]
+        //public ServiceabilityResponse GetData([FromBody] ServiceabilityRequest ApiRequestModel)
+        //{
+        //    ServiceabilityResponse objApiResponseModel = new ServiceabilityResponse();
+        //    InstallmentDetails obInstallmentDetails;
+        //    List<InstallmentDetails> obInstallmentDetailsList = new List<InstallmentDetails>();
+
+        //    objApiResponseModel.NDIBuffer = 100.00M;
+        //    objApiResponseModel.NDIBufferPercentage = 101.00M;
+        //    objApiResponseModel.NetSurplusPreInstallment = 102.00M;
+        //    objApiResponseModel.NetDisposableIncomePreInstallment = 103.00M;
+
+
+        //    objApiResponseModel.ApplicantHEMValue = 104.00M;
+        //    objApiResponseModel.RequestID = ApiRequestModel.ServiceabilityRequestSummary.RequestID;
+        //    objApiResponseModel.ResponseID = 1;
+        //    objApiResponseModel.CoBorrowerHEMValue = 105.00M;
+        //    objApiResponseModel.CombinedHEMValue = 220.00M; ;
+        //   // objApiResponseModel.CalculatedApplicationType = 2;
+        //    objApiResponseModel.IsRequestValid = true;
+        //    objApiResponseModel.CorrelationID = ApiRequestModel.ServiceabilityRequestSummary.CorrelationID;
+        //    // objApiResponseModel.ApplicationID = ApiRequestModel.ServiceabilityRequestSummary.ApplicationID;
+
+        //    string keyValue = string.Empty;
+
+        //    for (int i = 0; i < ApiRequestModel.ServiceabilityRequestSummary.TermInstallments.Count; i++)
+        //    {
+        //        obInstallmentDetails = new InstallmentDetails();
+
+        //        if (ApiRequestModel.ServiceabilityRequestSummary.TermInstallments.Count == 5 || ApiRequestModel.ServiceabilityRequestSummary.TermInstallments.Count == 1)
+        //        {
+        //            if (i == 0)
+        //            {
+        //                obInstallmentDetails.InstallmentValue = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentValue;
+        //                obInstallmentDetails.InstallmentTermInMonths = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentTermInMonths;
+        //                obInstallmentDetails.NDI = 5.50M;
+        //                obInstallmentDetails.NDIPercentage = 6.50M;
+        //                keyValue = System.Configuration.ConfigurationManager.AppSettings["1"];
+        //                if (keyValue == "true")
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = true;
+
+        //                }
+        //                else
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = false;
+        //                }
+        //            }
+
+        //            if (i == 1)
+        //            {
+        //                obInstallmentDetails.InstallmentValue = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentValue;
+        //                obInstallmentDetails.InstallmentTermInMonths = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentTermInMonths;
+        //                obInstallmentDetails.NDI = 7.50M;
+        //                obInstallmentDetails.NDIPercentage = 8.50M;
+        //                keyValue = System.Configuration.ConfigurationManager.AppSettings["2"];
+        //                if (keyValue == "true")
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = true;
+        //                }
+        //                else
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = false;
+        //                }
+        //            }
+
+        //            if (i == 2)
+        //            {
+        //                obInstallmentDetails.InstallmentValue = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentValue;
+        //                obInstallmentDetails.InstallmentTermInMonths = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentTermInMonths;
+        //                obInstallmentDetails.NDI = 9.50M;
+        //                obInstallmentDetails.NDIPercentage = 10.50M;
+        //                keyValue = System.Configuration.ConfigurationManager.AppSettings["3"];
+        //                if (keyValue == "true")
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = true;
+        //                }
+        //                else
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = false;
+        //                }
+        //            }
+
+        //            if (i == 3)
+        //            {
+        //                obInstallmentDetails.InstallmentValue = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentValue;
+        //                obInstallmentDetails.InstallmentTermInMonths = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentTermInMonths;
+        //                obInstallmentDetails.NDI = 11.50M;
+        //                obInstallmentDetails.NDIPercentage = 12.50M;
+        //                keyValue = System.Configuration.ConfigurationManager.AppSettings["4"];
+        //                if (keyValue == "true")
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = true;
+        //                }
+        //                else
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = false;
+        //                }
+        //            }
+
+        //            if (i == 4)
+        //            {
+        //                obInstallmentDetails.InstallmentValue = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentValue;
+        //                obInstallmentDetails.InstallmentTermInMonths = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentTermInMonths;
+        //                obInstallmentDetails.NDI = 13.50M;
+        //                obInstallmentDetails.NDIPercentage =14.50M;
+        //                keyValue = System.Configuration.ConfigurationManager.AppSettings["5"];
+        //                if (keyValue == "true")
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = true;
+        //                }
+        //                else
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = false;
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (i == 0)
+        //            {
+        //                obInstallmentDetails.InstallmentValue = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentValue;
+        //                obInstallmentDetails.InstallmentTermInMonths = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentTermInMonths;
+        //                obInstallmentDetails.NDI = 15.50M;
+        //                obInstallmentDetails.NDIPercentage = 16.50M;
+        //                keyValue = System.Configuration.ConfigurationManager.AppSettings["0"];
+        //                if (keyValue == "true")
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = true;
+
+        //                }
+        //                else
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = false;
+        //                }
+        //            }
+
+        //            if (i == 1)
+        //            {
+        //                obInstallmentDetails.InstallmentValue = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentValue;
+        //                obInstallmentDetails.InstallmentTermInMonths = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentTermInMonths;
+        //                obInstallmentDetails.NDI =17.50M;
+        //                obInstallmentDetails.NDIPercentage = 18.50M;
+        //                keyValue = System.Configuration.ConfigurationManager.AppSettings["1"];
+        //                if (keyValue == "true")
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = true;
+
+        //                }
+        //                else
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = false;
+        //                }
+        //            }
+
+        //            if (i == 2)
+        //            {
+        //                obInstallmentDetails.InstallmentValue = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentValue;
+        //                obInstallmentDetails.InstallmentTermInMonths = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentTermInMonths;
+        //                obInstallmentDetails.NDI = 19.50M;
+        //                obInstallmentDetails.NDIPercentage = 20.50M;
+        //                keyValue = System.Configuration.ConfigurationManager.AppSettings["2"];
+        //                if (keyValue == "true")
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = true;
+        //                }
+        //                else
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = false;
+        //                }
+        //            }
+
+        //            if (i == 3)
+        //            {
+        //                obInstallmentDetails.InstallmentValue = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentValue;
+        //                obInstallmentDetails.InstallmentTermInMonths = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentTermInMonths;
+        //                obInstallmentDetails.NDI = 21.50M;
+        //                obInstallmentDetails.NDIPercentage = 22.50M;
+        //                keyValue = System.Configuration.ConfigurationManager.AppSettings["3"];
+        //                if (keyValue == "true")
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = true;
+        //                }
+        //                else
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = false;
+        //                }
+        //            }
+
+        //            if (i == 4)
+        //            {
+        //                obInstallmentDetails.InstallmentValue = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentValue;
+        //                obInstallmentDetails.InstallmentTermInMonths = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentTermInMonths;
+        //                obInstallmentDetails.NDI = 23.50M;
+        //                obInstallmentDetails.NDIPercentage =24.50M;
+        //                keyValue = System.Configuration.ConfigurationManager.AppSettings["4"];
+        //                if (keyValue == "true")
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = true;
+        //                }
+        //                else
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = false;
+        //                }
+        //            }
+
+        //            if (i == 5)
+        //            {
+        //                obInstallmentDetails.InstallmentValue = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentValue;
+        //                obInstallmentDetails.InstallmentTermInMonths = ApiRequestModel.ServiceabilityRequestSummary.TermInstallments[i].InstallmentTermInMonths;
+        //                obInstallmentDetails.NDI = 25.50M;
+        //                obInstallmentDetails.NDIPercentage = 26.50M;
+        //                keyValue = System.Configuration.ConfigurationManager.AppSettings["5"];
+        //                if (keyValue == "true")
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = true;
+        //                }
+        //                else
+        //                {
+        //                    obInstallmentDetails.InstallmentServicible = false;
+        //                }
+        //            }
+        //        }
+
+        //        obInstallmentDetailsList.Add(obInstallmentDetails);
+
+        //    }
+        //    objApiResponseModel.InstallmentDetails = obInstallmentDetailsList;
+
+
+        //    return objApiResponseModel;
+        //}
+
+
+    }
+}

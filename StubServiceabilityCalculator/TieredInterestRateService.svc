@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="StubServiceabilityCalculator.TieredInterestRateService" CodeBehind="TieredInterestRateService.svc.cs" %>
