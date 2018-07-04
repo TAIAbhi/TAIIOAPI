@@ -2173,6 +2173,60 @@ namespace StubAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, custResponse);
 
         }
+        [Route("api/getsectioncategorywithcount/{contactNumber=contactNumber}/{suburb=suburb}/{areaCode=areaCode}/{cityId=cityId}/{uniqueCount=uniqueCount}")]
+        [AuthorizationRequired]
+        [HttpGet]
+        public HttpResponseMessage GetSCWithCount(string contactNumber, string suburb, string areaCode, int ? cityId, bool uniqueCount)
+        {
+            SuggestionCounts objSuggCount = new SuggestionCounts();
+
+            CustomDataResponseMessage custResponse = new CustomDataResponseMessage();
+            DataSet dtLocation = new DataSet();
+            UserDetailsWeb objUserDetails = new UserDetailsWeb();
+            try
+            {
+
+                dtLocation = objUserDetails.GetSCWithCount(contactNumber, suburb, areaCode, cityId, uniqueCount);
+                IList<CategoryCount> items = dtLocation.Tables[0].AsEnumerable().Select(row =>
+                 new CategoryCount
+                 {
+                     catId = row.Field<int>("CatId"),
+                     name = row.Field<string>("Name"),
+                     subCatId = row.Field<int?>("SubCatId"),
+                     categoryName = row.Field<string>("CName"),
+                     suggCount = row.Field<int?>("SugCnt")
+                 }).ToList();
+                objSuggCount.CategoryCountData = items;
+
+                if (contactNumber != "contactNumber")
+                {
+                    IList<SectionCount> sectionItem = dtLocation.Tables[1].AsEnumerable().Select(row =>
+                   new SectionCount
+                   {
+                       catId = row.Field<int>("CatId"),
+                       name = row.Field<string>("Name"),
+                       suggCount = row.Field<int?>("SugCnt")
+                   }).ToList();
+                    objSuggCount.SectionCountData = sectionItem;
+                }           
+
+                custResponse.action = "success";
+                custResponse.message = "";
+                custResponse.data = objSuggCount;
+            }
+            catch (Exception ex)
+            {
+
+                custResponse.action = "failure";
+                custResponse.message = ex.Message;
+                custResponse.data = null;
+                SendEmail(ex.Message, "BindVSFilterDD");
+                return Request.CreateResponse(HttpStatusCode.ExpectationFailed, custResponse);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, custResponse);
+
+        }
 
     }
 }

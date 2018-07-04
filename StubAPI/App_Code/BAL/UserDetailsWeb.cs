@@ -87,7 +87,7 @@ namespace StubAPI.BAL
             try
             {
                 string spName = "spGetHelp";
-                SqlParameter[] parameters = new SqlParameter[1];                      
+                SqlParameter[] parameters = new SqlParameter[1];
                 if (!string.IsNullOrEmpty(modulename))
                 {
                     parameters[0] = new SqlParameter("@ModuleName", modulename);
@@ -109,7 +109,7 @@ namespace StubAPI.BAL
             }
             return dtuserDtails;
         }
-        public DataTable GetBusinessName(int ? catId, int ? subCat, int ? cityId)
+        public DataTable GetBusinessName(int? catId, int? subCat, int? cityId)
         {
             DataTable dtuserDtails = new DataTable();
 
@@ -247,7 +247,7 @@ namespace StubAPI.BAL
             return dtuserDtails;
         }
 
-        public DataSet GetCategory(int? catid, int? contactId, bool ? isRequest)
+        public DataSet GetCategory(int? catid, int? contactId, bool? isRequest)
         {
             DataSet dtuserDtails = new DataSet();
 
@@ -257,7 +257,7 @@ namespace StubAPI.BAL
                 SqlParameter[] parameters = new SqlParameter[3];
                 parameters[0] = new SqlParameter("@CatId", catid);
                 parameters[1] = new SqlParameter("@ContactId", contactId);
-                parameters[2] = new SqlParameter("@IsRequest", isRequest==null?false: isRequest);               
+                parameters[2] = new SqlParameter("@IsRequest", isRequest == null ? false : isRequest);
 
                 if (SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables.Count > 0)
                 {
@@ -283,7 +283,7 @@ namespace StubAPI.BAL
                 SqlParameter[] parameters = new SqlParameter[2];
                 parameters[0] = new SqlParameter("@SubCateId", Subcatid);
                 parameters[1] = new SqlParameter("@MicroId", MicroId);
-                
+
                 if (SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables.Count > 0)
                 {
                     dtuserDtails = SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables[0];
@@ -297,16 +297,16 @@ namespace StubAPI.BAL
             }
             return dtuserDtails;
         }
-        
 
-       public DataTable GetCity()
+
+        public DataTable GetCity()
         {
             DataTable dtuserDtails = new DataTable();
 
             try
             {
                 string spName = "spGetCity";
-             
+
                 if (SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName).Tables.Count > 0)
                 {
                     dtuserDtails = SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName).Tables[0];
@@ -340,7 +340,7 @@ namespace StubAPI.BAL
             }
             return dtuserDtails;
         }
-        public DataSet GetRequestSuggestion(int? catId, int? subCatId, int? contactId, string location, int? microcate, int ? pageSize, int ? pageNumber, out int returnTotalRows, int? cityId)
+        public DataSet GetRequestSuggestion(int? catId, int? subCatId, int? contactId, string location, int? microcate, int? pageSize, int? pageNumber, out int returnTotalRows, int? cityId)
         {
 
 
@@ -408,7 +408,7 @@ namespace StubAPI.BAL
                 SqlParameter[] parameters = new SqlParameter[5];
                 parameters[0] = new SqlParameter("@ContactId", contactId);
                 parameters[1] = new SqlParameter("@SourceId", sourceId);
-                if(!string.IsNullOrEmpty(token))
+                if (!string.IsNullOrEmpty(token))
                 {
                     parameters[2] = new SqlParameter("@Token", token);
                 }
@@ -416,10 +416,10 @@ namespace StubAPI.BAL
                 {
                     parameters[2] = new SqlParameter("@Token", DBNull.Value);
                 }
-                if (name== "name")
+                if (name == "name")
                 {
                     parameters[3] = new SqlParameter("@Name", DBNull.Value);
-                   
+
                 }
                 else
                 {
@@ -472,7 +472,7 @@ namespace StubAPI.BAL
         //    }
         //    return dtuserDtails;
         //}
-        public DataSet GetSuggestionWithCount(int? catId, int? subCatId, int? sugId, int? contactId, string token, int? sourceId, string businessName, bool? isLocal, string location, int? microcate, int pageSize, int pageNumber, out int returnTotalRows, string microName, int ? cityId, string areaShortCode)
+        public DataSet GetSuggestionWithCount(int? catId, int? subCatId, int? sugId, int? contactId, string token, int? sourceId, string businessName, bool? isLocal, string location, int? microcate, int pageSize, int pageNumber, out int returnTotalRows, string microName, int? cityId, string areaShortCode)
         {
 
 
@@ -538,7 +538,7 @@ namespace StubAPI.BAL
                 }
                 parameters[14] = new SqlParameter("@CityId", cityId);
 
-                
+
                 if (areaShortCode == "areaShortCode")
                 {
                     parameters[15] = new SqlParameter("@AreaShortCode", DBNull.Value);
@@ -560,12 +560,12 @@ namespace StubAPI.BAL
             return dtuserDtails;
         }
 
-        public DataSet GetSuggestion(int? catId, int? subCatId, int? sugId, int? contactId, string token, int? sourceId, string businessName, bool? isLocal, string location, int? microcate,int pageSize, int pageNumber,out int returnTotalRows, string microName, int ? cityId)
+        public DataSet GetSuggestion(int? catId, int? subCatId, int? sugId, int? contactId, string token, int? sourceId, string businessName, bool? isLocal, string location, int? microcate, int pageSize, int pageNumber, out int returnTotalRows, string microName, int? cityId)
         {
 
 
             DataSet dtuserDtails = new DataSet();
-          
+
             try
             {
 
@@ -587,21 +587,21 @@ namespace StubAPI.BAL
                 }
                 parameters[5] = new SqlParameter("@SourceId", sourceId);
 
-                if (businessName== "businessName")
+                if (businessName == "businessName")
                 {
                     parameters[6] = new SqlParameter("@BusinessName", DBNull.Value);
                 }
                 else
-                {                   
+                {
                     parameters[6] = new SqlParameter("@BusinessName", businessName);
                 }
-                if (location== "location")
+                if (location == "location")
                 {
                     parameters[7] = new SqlParameter("@Location", DBNull.Value);
                 }
                 else
                 {
-                   
+
                     parameters[7] = new SqlParameter("@Location", location);
                 }
                 parameters[8] = new SqlParameter("@IsLocal", isLocal);
@@ -613,7 +613,7 @@ namespace StubAPI.BAL
                 parameters[11] = new SqlParameter("@PageSize", pageSize);
                 parameters[12] = new SqlParameter("@PageNumber", pageNumber);
 
-               // parameters[13] = new SqlParameter("@MCName", microName);
+                // parameters[13] = new SqlParameter("@MCName", microName);
 
                 if (microName == "microName")
                 {
@@ -636,7 +636,7 @@ namespace StubAPI.BAL
             }
             return dtuserDtails;
         }
-        public DataTable GetLocation(int? locationid, string suburb, string locationName,int ? cityId, string areaShortCode)
+        public DataTable GetLocation(int? locationid, string suburb, string locationName, int? cityId, string areaShortCode)
         {
             DataTable dtuserDtails = new DataTable();
 
@@ -663,8 +663,8 @@ namespace StubAPI.BAL
                 }
                 parameters[3] = new SqlParameter("@CityId", cityId);
 
-                
-               if (areaShortCode == "areaShortCode")
+
+                if (areaShortCode == "areaShortCode")
                 {
                     parameters[4] = new SqlParameter("@AreaShortCode", DBNull.Value);
                 }
@@ -718,7 +718,7 @@ namespace StubAPI.BAL
             }
             return dtuserDtails;
         }
-        public DataSet GetSubCategory(int? catid, int? subcatId, int? contactId, bool ? isRequest)
+        public DataSet GetSubCategory(int? catid, int? subcatId, int? contactId, bool? isRequest)
         {
             DataSet dtuserDtails = new DataSet();
 
@@ -730,8 +730,8 @@ namespace StubAPI.BAL
                 parameters[0] = new SqlParameter("@CatId", catid);
                 parameters[1] = new SqlParameter("@SubCatId", subcatId);
                 parameters[2] = new SqlParameter("@ContactId", contactId);
-                parameters[3] = new SqlParameter("@IsRequest", isRequest==null?false: isRequest);
-                
+                parameters[3] = new SqlParameter("@IsRequest", isRequest == null ? false : isRequest);
+
                 if (SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables.Count > 0)
                 {
                     dtuserDtails = SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters);
@@ -744,7 +744,7 @@ namespace StubAPI.BAL
                 throw ex;
             }
             return dtuserDtails;
-        }       
+        }
 
         public bool UpdateMacID(int contactid, string macId)
         {
@@ -772,7 +772,7 @@ namespace StubAPI.BAL
             }
             return result;
         }
-        public bool UpdateContact(int contactid, string loc1, string loc2, string loc3, string comments, int ? understanding, int ? notification, bool ? isContactDetailsAdded,int ? platform,bool allowProvideSuggestion)
+        public bool UpdateContact(int contactid, string loc1, string loc2, string loc3, string comments, int? understanding, int? notification, bool? isContactDetailsAdded, int? platform, bool allowProvideSuggestion)
         {
             bool result = false;
             int noOfEffectedRows = 0;
@@ -794,7 +794,7 @@ namespace StubAPI.BAL
                 parameters[8] = new SqlParameter("@IsContactDetailsAdded", isContactDetailsAdded);
                 parameters[9] = new SqlParameter("@Platform", platform);
                 parameters[10] = new SqlParameter("@AllowProvideSuggestion", allowProvideSuggestion);
-                
+
                 noOfEffectedRows = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters);
                 outParamSave = parameters[7].Value == null ? 0 : Convert.ToInt32(parameters[7].Value);
                 if (outParamSave > 0)
@@ -896,7 +896,7 @@ namespace StubAPI.BAL
             }
             return result;
         }
-        public bool SaveContact(int sourceid, string name, string number, string loc1, string loc2, string loc3, string comments, int ? understanding, int ? notification, bool? isContactDetailsAdded, int ?platform,bool allowProvideSuggestion)
+        public bool SaveContact(int sourceid, string name, string number, string loc1, string loc2, string loc3, string comments, int? understanding, int? notification, bool? isContactDetailsAdded, int? platform, bool allowProvideSuggestion)
         {
             bool result = false;
             int noOfEffectedRows = 0;
@@ -926,7 +926,7 @@ namespace StubAPI.BAL
 
                 parameters[11] = new SqlParameter("@Platform", platform);
                 parameters[12] = new SqlParameter("@AllowProvideSuggestion", allowProvideSuggestion);
-                
+
                 noOfEffectedRows = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters);
                 outParamSave = parameters[9].Value == null ? 0 : Convert.ToInt32(parameters[9].Value);
                 if (outParamSave > 0)
@@ -940,7 +940,7 @@ namespace StubAPI.BAL
             }
             return result;
         }
-        public bool SaveContactSuggestions(int sourceid, int contactid, string category, string subcate, string microcat, string bussiName, bool iscitilevel, string busCont, string loc1, string loc2, string loc3, string comments, string importdata, string locationId4, string locationId5, string @locationId6, string contactComments,bool isAChain, string platForm, int ? city, int ? requestID, bool usedTagSuggetion)
+        public bool SaveContactSuggestions(int sourceid, int contactid, string category, string subcate, string microcat, string bussiName, bool iscitilevel, string busCont, string loc1, string loc2, string loc3, string comments, string importdata, string locationId4, string locationId5, string @locationId6, string contactComments, bool isAChain, string platForm, int? city, int? requestID, bool usedTagSuggetion)
         {
             bool result = false;
             int noOfEffectedRows = 0;
@@ -975,7 +975,7 @@ namespace StubAPI.BAL
                 parameters[20] = new SqlParameter("@City", city);
                 parameters[21] = new SqlParameter("@RequestID", requestID);
                 parameters[22] = new SqlParameter("@UsedTagSuggetion", usedTagSuggetion);
-                
+
 
                 noOfEffectedRows = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters);
                 outParamSave = parameters[18].Value == null ? 0 : Convert.ToInt32(parameters[18].Value);
@@ -1018,7 +1018,7 @@ namespace StubAPI.BAL
             }
             return result;
         }
-        public bool UpdateContactSuggestions(int suggId,int sourceid, int contactid, string category, string subcate, string microcat, string bussiName, bool iscitilevel, string busCont, string loc1, string loc2, string loc3, string comments, string importdata, string locationId4, string locationId5, string @locationId6, string contactComments,bool isAChain, string platForm, int ? city)
+        public bool UpdateContactSuggestions(int suggId, int sourceid, int contactid, string category, string subcate, string microcat, string bussiName, bool iscitilevel, string busCont, string loc1, string loc2, string loc3, string comments, string importdata, string locationId4, string locationId5, string @locationId6, string contactComments, bool isAChain, string platForm, int? city)
         {
             bool result = false;
             int noOfEffectedRows = 0;
@@ -1047,12 +1047,12 @@ namespace StubAPI.BAL
                 parameters[14] = new SqlParameter("@LocationId5", locationId5);
                 parameters[15] = new SqlParameter("@LocationId6", locationId6);
                 parameters[16] = new SqlParameter("@ContactComments", contactComments);
-                parameters[17] = new SqlParameter("@IsAChain", isAChain);                
+                parameters[17] = new SqlParameter("@IsAChain", isAChain);
                 parameters[18] = new SqlParameter("@IsSaved", outParamSave);
-                parameters[18].Direction = ParameterDirection.Output;                
-               parameters[19] = new SqlParameter("@SuggId", suggId);
+                parameters[18].Direction = ParameterDirection.Output;
+                parameters[19] = new SqlParameter("@SuggId", suggId);
                 parameters[20] = new SqlParameter("@Platform", platForm);
-                parameters[21] = new SqlParameter("@City", city);                
+                parameters[21] = new SqlParameter("@City", city);
                 noOfEffectedRows = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters);
                 outParamSave = parameters[18].Value == null ? 0 : Convert.ToInt32(parameters[18].Value);
                 if (outParamSave > 0)
@@ -1095,7 +1095,7 @@ namespace StubAPI.BAL
             }
             return result;
         }
-        public DataTable GetSuburb(int ? cityId, string areaShortCode)
+        public DataTable GetSuburb(int? cityId, string areaShortCode)
         {
             DataTable dtuserDtails = new DataTable();
 
@@ -1104,7 +1104,7 @@ namespace StubAPI.BAL
                 string spName = "spLoctionSuburb";
                 SqlParameter[] parameters = new SqlParameter[2];
                 parameters[0] = new SqlParameter("@CityId", cityId);
-                if(areaShortCode== "areaShortCode")
+                if (areaShortCode == "areaShortCode")
                 {
                     parameters[1] = new SqlParameter("@AreaShortCode", DBNull.Value);
                 }
@@ -1112,7 +1112,7 @@ namespace StubAPI.BAL
                 {
                     parameters[1] = new SqlParameter("@AreaShortCode", areaShortCode);
                 }
-                
+
                 if (SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables.Count > 0)
                 {
                     dtuserDtails = SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables[0];
@@ -1164,20 +1164,20 @@ namespace StubAPI.BAL
 
         #endregion
 
-        public bool SaveDevice(int uid, int contactID, string token, string deviceID,string type, out int ? returnuid)
+        public bool SaveDevice(int uid, int contactID, string token, string deviceID, string type, out int? returnuid)
         {
             bool result = false;
             int noOfEffectedRows = 0;
             int outParamSave = 0;
             try
-            {         
+            {
 
                 string spName = "spSaveDevice";
                 SqlParameter[] parameters = new SqlParameter[6];
                 parameters[0] = new SqlParameter("@ContactID", contactID);
                 parameters[1] = new SqlParameter("@Token", token);
                 parameters[2] = new SqlParameter("@DeviceID", deviceID);
-                parameters[3] = new SqlParameter("@Type", type);                
+                parameters[3] = new SqlParameter("@Type", type);
                 parameters[4] = new SqlParameter("@IsSaved", outParamSave);
                 parameters[4].Direction = ParameterDirection.Output;
                 parameters[5] = new SqlParameter("@UID", uid);
@@ -1195,13 +1195,13 @@ namespace StubAPI.BAL
             }
             return result;
         }
-        public bool SaveRequestSuggestion(int uid, int catid, int subcatid,int microcatid,string location, int cityid,string comments, int contactid,int platform)
+        public bool SaveRequestSuggestion(int uid, int catid, int subcatid, int microcatid, string location, int cityid, string comments, int contactid, int platform)
         {
             bool result = false;
             int noOfEffectedRows = 0;
             int outParamSave = 0;
             try
-            {          
+            {
 
                 string spName = "spSaveRequestSuggestion";
                 SqlParameter[] parameters = new SqlParameter[10];
@@ -1211,7 +1211,7 @@ namespace StubAPI.BAL
                 parameters[4] = new SqlParameter("@MicrocategoryId", microcatid);
                 parameters[5] = new SqlParameter("@Location", location);
                 parameters[6] = new SqlParameter("@CityId", cityid);
-                parameters[7] = new SqlParameter("@Comments", comments);             
+                parameters[7] = new SqlParameter("@Comments", comments);
                 parameters[8] = new SqlParameter("@ContactId", contactid);
                 parameters[9] = new SqlParameter("@Platform", platform);
                 parameters[2] = new SqlParameter("@IsSaved", outParamSave);
@@ -1229,13 +1229,13 @@ namespace StubAPI.BAL
             }
             return result;
         }
-        public bool UpdateNotification(int ContactId, int ? NotificationID,bool? Done,bool ? Dismiss)
+        public bool UpdateNotification(int ContactId, int? NotificationID, bool? Done, bool? Dismiss)
         {
             bool result = true;
-         
+
             try
             {
- 
+
                 string spName = "spUpdateNotification";
                 SqlParameter[] parameters = new SqlParameter[4];
                 parameters[0] = new SqlParameter("@ContactId", ContactId);
@@ -1243,12 +1243,12 @@ namespace StubAPI.BAL
                 parameters[2] = new SqlParameter("@Done", Done);
                 parameters[3] = new SqlParameter("@Dismiss", Dismiss);
                 SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters);
-               
+
             }
             catch (Exception ex)
             {
                 result = false;
-               // throw ex;
+                // throw ex;
             }
             return result;
         }
@@ -1262,12 +1262,12 @@ namespace StubAPI.BAL
 
                 string spName = "spDeleteContactSuggestions";
                 SqlParameter[] parameters = new SqlParameter[3];
-                parameters[0] = new SqlParameter("@SuggId", uid);            
+                parameters[0] = new SqlParameter("@SuggId", uid);
                 parameters[1] = new SqlParameter("@IsSaved", outParamSave);
                 parameters[1].Direction = ParameterDirection.Output;
-                parameters[2] = new SqlParameter("@ReasonForChange", reasonForChange);                
+                parameters[2] = new SqlParameter("@ReasonForChange", reasonForChange);
                 noOfEffectedRows = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters);
-                outParamSave = parameters[1].Value == null ? 0 : Convert.ToInt32(parameters[1].Value);              
+                outParamSave = parameters[1].Value == null ? 0 : Convert.ToInt32(parameters[1].Value);
                 if (outParamSave > 0)
                 {
                     result = true;
@@ -1281,7 +1281,7 @@ namespace StubAPI.BAL
         }
         public DataTable GetNotifications(int ContactId, string DeviceId)
         {
-            DataTable dtuserDtails = new DataTable();          
+            DataTable dtuserDtails = new DataTable();
             try
             {
                 string spName = "spGetNotifications";
@@ -1332,7 +1332,7 @@ namespace StubAPI.BAL
             return dtuserDtails;
         }
 
-        public bool UpdateNotificationTimeSent( string deviceUIDList)
+        public bool UpdateNotificationTimeSent(string deviceUIDList)
         {
             bool result = true;
 
@@ -1341,7 +1341,7 @@ namespace StubAPI.BAL
 
                 string spName = "spUpdateNotificationTimeSent";
                 SqlParameter[] parameters = new SqlParameter[1];
-                parameters[0] = new SqlParameter("@DeviceUID", deviceUIDList);              
+                parameters[0] = new SqlParameter("@DeviceUID", deviceUIDList);
                 SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters);
             }
             catch (Exception ex)
@@ -1351,18 +1351,18 @@ namespace StubAPI.BAL
             }
             return result;
         }
-        public DataTable BindVSFilterDD(int contactId, string suburb,string geoCoordinates, string address, int cityId)
+        public DataTable BindVSFilterDD(int contactId, string suburb, string geoCoordinates, string address, int cityId)
         {
             DataTable dtuserDtails = new DataTable();
 
             try
             {
-               
+
                 string spName = "spGetViewScreenFilterDropDownDetails";
                 SqlParameter[] parameters = new SqlParameter[5];
                 parameters[0] = new SqlParameter("@contactId", contactId);
-              
-                
+
+
                 if (suburb == "suburb")
                 {
                     parameters[1] = new SqlParameter("@suburb", DBNull.Value);
@@ -1392,6 +1392,40 @@ namespace StubAPI.BAL
                 {
                     dtuserDtails = SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables[0];
                 }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return dtuserDtails;
+        }
+
+        public DataSet GetSCWithCount(string contactNumber, string suburb, string areaCode, int? cityId, bool uniqueCount)
+        {
+            DataSet dtuserDtails = new DataSet();
+
+            try
+            {
+                string spName = "spGetSCWithCount";
+                SqlParameter[] parameters = new SqlParameter[5];
+                if (contactNumber == "contactNumber")
+                    parameters[0] = new SqlParameter("@ContactNumber", DBNull.Value);
+                else
+                    parameters[0] = new SqlParameter("@ContactNumber", contactNumber);
+                if (suburb == "suburb")
+                    parameters[1] = new SqlParameter("@Suburb", DBNull.Value);
+                else
+                    parameters[1] = new SqlParameter("@Suburb", suburb);
+                if (areaCode == "areaCode")
+                    parameters[2] = new SqlParameter("@AreaCode", DBNull.Value);
+                else
+                    parameters[2] = new SqlParameter("@AreaCode", areaCode);
+
+                parameters[3] = new SqlParameter("@CityId", cityId);
+                parameters[4] = new SqlParameter("@UniqueCount", uniqueCount);
+                dtuserDtails = SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters);
+
 
             }
             catch (Exception ex)
