@@ -2144,7 +2144,8 @@ namespace StubAPI.Controllers
                      ddValue = row.Field<string>("ddValue"),                  
                      ddText = row.Field<string>("ddText"),
                      filterType = row.Field<string>("filterType"),
-                     isSelected = row.Field<bool>("isSelected")
+                     isSelected = row.Field<bool>("isSelected"),
+                     cityId= row.Field<Int16>("cityID")
                  }).ToList();
                 if (items.Count > 0)
                 {

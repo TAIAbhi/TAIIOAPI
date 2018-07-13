@@ -23,6 +23,7 @@ namespace StubAPI.Models
         public string ddText { get; set; }
         public string filterType { get; set; }
         public bool isSelected { get; set; }
-      
+        public Int16 cityId { get; set; }
+
     }
 }
