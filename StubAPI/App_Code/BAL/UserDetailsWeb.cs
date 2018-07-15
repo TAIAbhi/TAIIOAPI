@@ -1377,7 +1377,7 @@ namespace StubAPI.BAL
                 }
                 else
                 {
-                    parameters[2] = new SqlParameter("@geoCoordinates", suburb);
+                    parameters[2] = new SqlParameter("@geoCoordinates", geoCoordinates);
                 }
                 if (address == "address")
                 {
@@ -1385,7 +1385,7 @@ namespace StubAPI.BAL
                 }
                 else
                 {
-                    parameters[3] = new SqlParameter("@address", suburb);
+                    parameters[3] = new SqlParameter("@address", address);
                 }
                 parameters[4] = new SqlParameter("@cityId", cityId);
                 if (SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables.Count > 0)
