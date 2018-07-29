@@ -1164,7 +1164,7 @@ namespace StubAPI.BAL
 
         #endregion
 
-        public bool SaveDevice(int uid, int contactID, string token, string deviceID, string type, out int? returnuid)
+        public bool SaveDevice(int uid, int contactID, string token, string deviceID, string type, out int? returnuid, string modelAndOS)
         {
             bool result = false;
             int noOfEffectedRows = 0;
@@ -1173,7 +1173,7 @@ namespace StubAPI.BAL
             {
 
                 string spName = "spSaveDevice";
-                SqlParameter[] parameters = new SqlParameter[6];
+                SqlParameter[] parameters = new SqlParameter[7];
                 parameters[0] = new SqlParameter("@ContactID", contactID);
                 parameters[1] = new SqlParameter("@Token", token);
                 parameters[2] = new SqlParameter("@DeviceID", deviceID);
@@ -1181,6 +1181,7 @@ namespace StubAPI.BAL
                 parameters[4] = new SqlParameter("@IsSaved", outParamSave);
                 parameters[4].Direction = ParameterDirection.Output;
                 parameters[5] = new SqlParameter("@UID", uid);
+                parameters[6] = new SqlParameter("@ModelAndOS", modelAndOS);                
                 noOfEffectedRows = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters);
                 outParamSave = parameters[4].Value == null ? 0 : Convert.ToInt32(parameters[4].Value);
                 returnuid = outParamSave;

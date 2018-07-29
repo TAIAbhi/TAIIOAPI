@@ -1644,7 +1644,7 @@ namespace StubAPI.Controllers
             custMessage.message = "some error has occured";
             try
             {
-                if (objUserDetails.SaveDevice(objDevice.uid, objDevice.contactId, objDevice.token, objDevice.deviceId, objDevice.type, out uid))
+                if (objUserDetails.SaveDevice(objDevice.uid, objDevice.contactId, objDevice.token, objDevice.deviceId, objDevice.type, out uid, objDevice.modelAndOS))
                 {
                     custMessage.action = "Success";
                     custMessage.message = "Record saved successfully!.";
@@ -1680,7 +1680,7 @@ namespace StubAPI.Controllers
             custMessage.message = "some error has occured";
             try
             {
-                if (objUserDetails.SaveDevice(objDevice.uid, objDevice.contactId, objDevice.token, objDevice.deviceId, objDevice.type, out uid))
+                if (objUserDetails.SaveDevice(objDevice.uid, objDevice.contactId, objDevice.token, objDevice.deviceId, objDevice.type, out uid, objDevice.modelAndOS))
                 {
                     custMessage.action = "Success";
                     custMessage.message = "Record updated successfully!.";
@@ -2196,7 +2196,11 @@ namespace StubAPI.Controllers
                      name = row.Field<string>("Name"),
                      subCatId = row.Field<int?>("SubCatId"),
                      categoryName = row.Field<string>("CName"),
-                     suggCount = row.Field<int?>("SugCnt")
+                     suggCount = row.Field<int?>("SugCnt"),
+                     microCategoryToolTip= row.Field<string>("microCategoryToolTip"),
+                     commentsToolTip = row.Field<string>("commentsToolTip"),
+                     isLocal = row.Field<bool>("isLocal")
+
                  }).ToList();
                 objSuggCount.CategoryCountData = items;
 

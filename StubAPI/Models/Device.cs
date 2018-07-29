@@ -15,6 +15,9 @@ namespace StubAPI.Models
         public string token { get; set; }
 
         public int contactId { get; set; }
-      
+
+        public string modelAndOS { get; set; }
+
+
     }
 }

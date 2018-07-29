@@ -37,7 +37,11 @@ namespace StubAPI.Models
         public int ? subCatId { get; set; }
         public string categoryName { get; set; }
         public int ? suggCount { get; set; }
-      
+        public string microCategoryToolTip { get; set; }
+        public string commentsToolTip { get; set; }
+        public bool isLocal { get; set; }
+        
+
 
     }
 
