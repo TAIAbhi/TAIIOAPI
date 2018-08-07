@@ -254,7 +254,7 @@ namespace StubAPI.BAL
             try
             {
                 string spName = "spGetCategory";
-                SqlParameter[] parameters = new SqlParameter[3];
+                SqlParameter[] parameters = new SqlParameter[6];
                 parameters[0] = new SqlParameter("@CatId", catid);
                 parameters[1] = new SqlParameter("@ContactId", contactId);
                 parameters[2] = new SqlParameter("@IsRequest", isRequest == null ? false : isRequest);
