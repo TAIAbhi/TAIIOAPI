@@ -247,7 +247,7 @@ namespace StubAPI.BAL
             return dtuserDtails;
         }
 
-        public DataSet GetCategory(int? catid, int? contactId, bool? isRequest)
+        public DataSet GetCategory(int? catid, int? contactId, bool? isRequest, int ? cityId, string areashortCode,string location)
         {
             DataSet dtuserDtails = new DataSet();
 
@@ -258,6 +258,16 @@ namespace StubAPI.BAL
                 parameters[0] = new SqlParameter("@CatId", catid);
                 parameters[1] = new SqlParameter("@ContactId", contactId);
                 parameters[2] = new SqlParameter("@IsRequest", isRequest == null ? false : isRequest);
+                parameters[3] = new SqlParameter("@CityId", cityId);
+                if(areashortCode== "areashortCode")
+                    parameters[4] = new SqlParameter("@ASC", DBNull.Value);
+                else
+                    parameters[4] = new SqlParameter("@ASC", areashortCode);
+
+                if(location== "location")
+                    parameters[5] = new SqlParameter("@Location", DBNull.Value);
+                else
+                    parameters[5] = new SqlParameter("@Location", location);
 
                 if (SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables.Count > 0)
                 {
@@ -718,19 +728,30 @@ namespace StubAPI.BAL
             }
             return dtuserDtails;
         }
-        public DataSet GetSubCategory(int? catid, int? subcatId, int? contactId, bool? isRequest)
+        public DataSet GetSubCategory(int? catid, int? subcatId, int? contactId, bool? isRequest,int ? cityId,string areashortCode, string location)
         {
             DataSet dtuserDtails = new DataSet();
 
 
             try
             {
+               
                 string spName = "spGetSubCategory";
-                SqlParameter[] parameters = new SqlParameter[4];
+                SqlParameter[] parameters = new SqlParameter[7];
                 parameters[0] = new SqlParameter("@CatId", catid);
                 parameters[1] = new SqlParameter("@SubCatId", subcatId);
                 parameters[2] = new SqlParameter("@ContactId", contactId);
                 parameters[3] = new SqlParameter("@IsRequest", isRequest == null ? false : isRequest);
+                parameters[4] = new SqlParameter("@CityId", cityId);
+                if (areashortCode == "areashortCode")
+                    parameters[5] = new SqlParameter("@ASC", DBNull.Value);
+                else
+                    parameters[5] = new SqlParameter("@ASC", areashortCode);
+
+                if (location == "location")
+                    parameters[6] = new SqlParameter("@Location", DBNull.Value);
+                else
+                    parameters[6] = new SqlParameter("@Location", location);
 
                 if (SqlHelper.ExecuteDataset(SqlHelper.GetConnectionString("Isweb"), CommandType.StoredProcedure, spName, parameters).Tables.Count > 0)
                 {

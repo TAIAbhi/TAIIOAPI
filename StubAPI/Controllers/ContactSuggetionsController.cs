@@ -142,10 +142,10 @@ namespace StubAPI.Controllers
 
             // return objSource;
         }
-        [Route("api/categories/{isRequest=isRequest}")]
+        [Route("api/categories/{isRequest=isRequest}/{cityId=cityId}/{areaShortCode=areaShortCode}/{location=location}")]
         [AuthorizationRequired]
         [HttpGet]
-        public HttpResponseMessage GetCategory(bool? isRequest)
+        public HttpResponseMessage GetCategory(bool? isRequest, int ? cityId, string areaShortCode, string location)
         {
 
             CustomDataResponseMessage custResponse = new CustomDataResponseMessage();
@@ -153,7 +153,7 @@ namespace StubAPI.Controllers
             UserDetailsWeb objUserDetails = new UserDetailsWeb();
             try
             {
-                dtContact = objUserDetails.GetCategory(null, null, isRequest).Tables[2];
+                dtContact = objUserDetails.GetCategory(null, null, isRequest, cityId, areaShortCode, location).Tables[2];
                 IList<Category> items = dtContact.AsEnumerable().Select(row =>
                  new Category
                  {
@@ -161,7 +161,7 @@ namespace StubAPI.Controllers
                      name = row.Field<string>("Name"),
                      // isMicroCategoryAvailable = row.Field<bool>("IsMicroCategoryAvailable"),
                      catCount = row.Field<int>("CatCount"),
-                     subCategories = GeSubCategorybyCatId(row.Field<int>("CatId"), isRequest)
+                     subCategories = GeSubCategorybyCatId(row.Field<int>("CatId"), isRequest, cityId, areaShortCode, location)
                  }).ToList();
                 if (items.Count > 0)
                 {
@@ -187,11 +187,11 @@ namespace StubAPI.Controllers
             }
             return Request.CreateResponse(HttpStatusCode.OK, custResponse);
         }
-        public IList<SubCategory> GeSubCategorybyCatId(int categoryId, bool? isRequest)
+        public IList<SubCategory> GeSubCategorybyCatId(int categoryId, bool? isRequest, int? cityId, string areaShortCode, string location)
         {
             DataTable dtContact = new DataTable();
             UserDetailsWeb objUserDetails = new UserDetailsWeb();
-            dtContact = objUserDetails.GetSubCategory(categoryId, null, null, isRequest).Tables[2];
+            dtContact = objUserDetails.GetSubCategory(categoryId, null, null, isRequest, cityId,  areaShortCode,  location).Tables[2];
             IList<SubCategory> items = dtContact.AsEnumerable().Select(row =>
              new SubCategory
              {
@@ -218,7 +218,7 @@ namespace StubAPI.Controllers
             {
 
 
-                dtContact = objUserDetails.GetSubCategory(categoryId, null, null, null).Tables[0];
+                dtContact = objUserDetails.GetSubCategory(categoryId, null, null, null,null,"areashortCode","location").Tables[0];
                 IList<SubCategory> items = dtContact.AsEnumerable().Select(row =>
                     new SubCategory
                     {
@@ -1435,7 +1435,7 @@ namespace StubAPI.Controllers
             Category objCategory = new Category();
             try
             {
-                dtContact = objUserDetails.GetSubCategory(catId, null, contactId, null).Tables[1];
+                dtContact = objUserDetails.GetSubCategory(catId, null, contactId, null,null,"areashortCode","location").Tables[1];
                 IList<SubCategory> items = dtContact.AsEnumerable().Select(row =>
                     new SubCategory
                     {
