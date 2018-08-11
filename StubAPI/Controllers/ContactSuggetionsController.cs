@@ -1957,7 +1957,7 @@ namespace StubAPI.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, custMessage);
         }
-        public ViewData GetDataForNotification(int? locid, int? catid, int? subcateid, int? mid, string scName, string Cname, string locName, string mcName, string addedBy, string addedwhen, string target, string redirectTo)
+        public ViewData GetDataForNotification(int? locid, int? catid, int? subcateid, int? mid, string scName, string Cname, string locName, string mcName, string addedBy, string addedwhen, string target, string redirectTo,int ? suggestionId, int ? redirectToType)
         {
             ViewData objViewData = new ViewData();
             objViewData.LocationId = locid;
@@ -1971,7 +1971,9 @@ namespace StubAPI.Controllers
             objViewData.addedBy = !string.IsNullOrEmpty(addedBy) ? addedBy : null;
             objViewData.addedWhen = !string.IsNullOrEmpty(addedwhen) ? addedwhen : null;
             objViewData.target = !string.IsNullOrEmpty(target) ? target : null;
-            objViewData.redirectTo = !string.IsNullOrEmpty(redirectTo)? redirectTo : null; 
+            objViewData.redirectTo = !string.IsNullOrEmpty(redirectTo)? redirectTo : null;
+            objViewData.redirectToType = redirectToType;
+            objViewData.suggestionId = suggestionId;
             return objViewData;
         }
         [Route("api/getnotifications/{contactId=contactId}/{deviceId=deviceId}")]
@@ -1984,10 +1986,12 @@ namespace StubAPI.Controllers
             UserDetailsWeb objUserDetails = new UserDetailsWeb();
             try
             {
+               
                 dtLocation = objUserDetails.GetNotifications(contactId, deviceId);
                 IList<NotificationDetails> items = dtLocation.AsEnumerable().Select(row =>
                  new NotificationDetails
                  {
+                     
                      notificationID = row.Field<int?>("UID"),
                      notificationType =!string.IsNullOrEmpty(row.Field<string>("NotificationType"))? row.Field<string>("NotificationType") : null,
                      notificationTitle = !string.IsNullOrEmpty(row.Field<string>("NotificationTitle")) ? row.Field<string>("NotificationTitle") : null,
@@ -1995,7 +1999,7 @@ namespace StubAPI.Controllers
                      notificationPhoto = !string.IsNullOrEmpty(row.Field<string>("NotificationPhoto"))? (row.Field<string>("NotificationPhoto").Contains("http://tagaboutit.com") ? row.Field<string>("NotificationPhoto"):null ): null,
                      timeSent = !string.IsNullOrEmpty(row.Field<string>("TimeSent")) ? row.Field<string>("TimeSent") : null,
 
-                     data = GetDataForNotification(row.Field<int?>("LocationId"), row.Field<int?>("CatId"), row.Field<int?>("SubCategoryId"), row.Field<int?>("MicrocategoryId"), row.Field<string>("SubCategoryName"), row.Field<string>("CategoryName"), row.Field<string>("LocationName"), row.Field<string>("MCName"), row.Field<string>("AddedBy"), row.Field<string>("AddedWhen"), row.Field<string>("Target"), row.Field<string>("RedirectTo"))
+                     data = GetDataForNotification(row.Field<int?>("LocationId"), row.Field<int?>("CatId"), row.Field<int?>("SubCategoryId"), row.Field<int?>("MicrocategoryId"), row.Field<string>("SubCategoryName"), row.Field<string>("CategoryName"), row.Field<string>("LocationName"), row.Field<string>("MCName"), row.Field<string>("AddedBy"), row.Field<string>("AddedWhen"), row.Field<string>("Target"), row.Field<string>("RedirectTo"), row.Field<int?>("SuggestionId"),  row.Field<int?>("RedirectToType"))
 
 
                  }).ToList();
@@ -2046,7 +2050,7 @@ namespace StubAPI.Controllers
             {
 
 
-                using (MailMessage mm = new MailMessage("gwalvanshi@gmail.com", "gwalvanshi@gmail.com,abhi.saste@gmail.com"))
+                using (MailMessage mm = new MailMessage("admin@tagaboutit.com", "gwalvanshi@gmail.com,abhi.saste@gmail.com"))
                 // using (MailMessage mm = new MailMessage("emailus @d2digitalservices.com", ToEmail))
 
 
@@ -2062,19 +2066,19 @@ namespace StubAPI.Controllers
                     mm.Body = body;
                     mm.IsBodyHtml = true;
                     SmtpClient smtp = new SmtpClient();
-                    smtp.Host = "smtp.gmail.com";
+                    smtp.Host = "us3.smtp.mailhostbox.com";
                     // smtp.Host = "smtpout.secureserver.net";
 
 
                     smtp.EnableSsl = true;
-                    NetworkCredential NetworkCred = new NetworkCredential("gwalvanshi@gmail.com", "bhagatram@1");
+                    NetworkCredential NetworkCred = new NetworkCredential("admin@tagaboutit.com", "TAI_8min");
                     // NetworkCredential NetworkCred = new NetworkCredential("emailus@d2digitalservices.com", "Ddig@87!");
 
                     smtp.UseDefaultCredentials = true;
                     smtp.Credentials = NetworkCred;
                     smtp.Port = 587;
                     smtp.EnableSsl = true;
-                    smtp.TargetName = "STARTTLS/smtp.gmail.com";
+                    smtp.TargetName = "STARTTLS/us3.smtp.mailhostbox.com";
                     // smtp.Port = 565;
 
 

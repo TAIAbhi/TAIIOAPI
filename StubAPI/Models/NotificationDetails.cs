@@ -28,6 +28,9 @@ namespace StubAPI.Models
     }
     public class ViewData
     {
+        
+        public int ? redirectToType { get; set; }
+        public int ? suggestionId { get; set; }
         public string target { get; set; }
         public int ? LocationId { get; set; }
         public int ? CatId { get; set; }
