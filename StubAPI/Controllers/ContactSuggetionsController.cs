@@ -100,6 +100,13 @@ namespace StubAPI.Controllers
                                 objTokenResponse.authToken = objToken.authToken;
                                 objTokenResponse.loginDetails = objSource;
 
+                                byte? platform = null;
+                                if (objSource.platform != null)
+                                {
+                                    platform = Convert.ToByte(objSource.platform);
+                                }
+
+                                ActivityLogger.ActivityLog(platform, "", "Login", "Login","login", false, objSource.contactId);
                                 return Request.CreateResponse(HttpStatusCode.OK, objTokenResponse);
 
                             }
@@ -145,7 +152,7 @@ namespace StubAPI.Controllers
         [Route("api/categories/{isRequest=isRequest}/{cityId=cityId}/{areaShortCode=areaShortCode}/{location=location}")]
         [AuthorizationRequired]
         [HttpGet]
-        public HttpResponseMessage GetCategory(bool? isRequest, int ? cityId, string areaShortCode, string location)
+        public HttpResponseMessage GetCategory(bool? isRequest, int? cityId, string areaShortCode, string location)
         {
 
             CustomDataResponseMessage custResponse = new CustomDataResponseMessage();
@@ -191,7 +198,7 @@ namespace StubAPI.Controllers
         {
             DataTable dtContact = new DataTable();
             UserDetailsWeb objUserDetails = new UserDetailsWeb();
-            dtContact = objUserDetails.GetSubCategory(categoryId, null, null, isRequest, cityId,  areaShortCode,  location).Tables[2];
+            dtContact = objUserDetails.GetSubCategory(categoryId, null, null, isRequest, cityId, areaShortCode, location).Tables[2];
             IList<SubCategory> items = dtContact.AsEnumerable().Select(row =>
              new SubCategory
              {
@@ -218,7 +225,7 @@ namespace StubAPI.Controllers
             {
 
 
-                dtContact = objUserDetails.GetSubCategory(categoryId, null, null, null,null,"areashortCode","location").Tables[0];
+                dtContact = objUserDetails.GetSubCategory(categoryId, null, null, null, null, "areashortCode", "location").Tables[0];
                 IList<SubCategory> items = dtContact.AsEnumerable().Select(row =>
                     new SubCategory
                     {
@@ -333,7 +340,7 @@ namespace StubAPI.Controllers
                      area = row.Field<string>("Area"),
                      city = row.Field<string>("City"),
                      suburb = row.Field<string>("Suburb"),
-                     areaShortCode= row.Field<string>("AreaShortCode")
+                     areaShortCode = row.Field<string>("AreaShortCode")
 
                  }).ToList();
 
@@ -501,7 +508,7 @@ namespace StubAPI.Controllers
                     Int64.TryParse(contactSugg.businessContact, out isNumber);
                     if (contactSugg.businessContact.Length == 10 && isNumber > 0)
                     {
-                        if (objUserDetails.SaveContactSuggestions(objContactSugg.sourceId, contactSugg.contactId, contactSugg.catId.ToString(), contactSugg.subCategoryId.ToString(), contactSugg.microcategory, contactSugg.businessName, contactSugg.citiLevelBusiness, contactSugg.businessContact, contactSugg.location,  contactSugg.locationId, contactSugg.areaShortCode, contactSugg.comments, "", contactSugg.location4, contactSugg.location5, contactSugg.location6, contactSugg.contactComments, contactSugg.isAChain, contactSugg.platForm, contactSugg.city, contactSugg.requestID, contactSugg.usedTagSuggetion))
+                        if (objUserDetails.SaveContactSuggestions(objContactSugg.sourceId, contactSugg.contactId, contactSugg.catId.ToString(), contactSugg.subCategoryId.ToString(), contactSugg.microcategory, contactSugg.businessName, contactSugg.citiLevelBusiness, contactSugg.businessContact, contactSugg.location, contactSugg.locationId, contactSugg.areaShortCode, contactSugg.comments, "", contactSugg.location4, contactSugg.location5, contactSugg.location6, contactSugg.contactComments, contactSugg.isAChain, contactSugg.platForm, contactSugg.city, contactSugg.requestID, contactSugg.usedTagSuggetion))
                         {
 
                             custMessage.action = "Success";
@@ -848,9 +855,9 @@ namespace StubAPI.Controllers
                         vendorIsVerified = row.Field<bool?>("VendorIsVerified"),
                         isValid = row.Field<bool?>("IsValid"),
                         usedTagSuggetion = row.Field<bool?>("UsedTagSuggetion"),
-                        showMaps= row.Field<bool?>("ShowMaps"),
+                        showMaps = row.Field<bool?>("ShowMaps"),
                         locationId = row.Field<string>("locationId"),
-                        areaShortCode= row.Field<string>("areaShortCode")
+                        areaShortCode = row.Field<string>("areaShortCode")
 
                     }).ToList().OrderByDescending(a => a.tagCount).ToList();
 
@@ -1090,7 +1097,7 @@ namespace StubAPI.Controllers
                      area = row.Field<string>("Area"),
                      city = row.Field<string>("City"),
                      suburb = row.Field<string>("Suburb"),
-                     areaShortCode= row.Field<string>("areaShortCode")
+                     areaShortCode = row.Field<string>("areaShortCode")
 
                  }).ToList();
                 if (items.Count > 0)
@@ -1219,10 +1226,10 @@ namespace StubAPI.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, custResponse);
         }
-        [Route("api/getsources/{sourceId=sourceId}/{name=name}")]
+        [Route("api/getsources/{sourceId=sourceId}/{name=name}/{isInterns=isInterns}")]
         [AuthorizationRequired]
         [HttpGet]
-        public HttpResponseMessage GetSources(int? sourceId, string name)
+        public HttpResponseMessage GetSources(int? sourceId, string name, bool? isInterns)
         {
             CustomDataResponseMessage custResponse = new CustomDataResponseMessage();
             ContactSuggestions objContact = new ContactSuggestions();
@@ -1230,7 +1237,7 @@ namespace StubAPI.Controllers
             DataTable dtContact = new DataTable();
             try
             {
-                dtContact = objUserDetails.GetSoruce(sourceId, name);
+                dtContact = objUserDetails.GetSoruce(sourceId, name, isInterns);
 
                 IList<ContactSuggestions> items = dtContact.AsEnumerable().Select(row =>
                     new ContactSuggestions
@@ -1435,7 +1442,7 @@ namespace StubAPI.Controllers
             Category objCategory = new Category();
             try
             {
-                dtContact = objUserDetails.GetSubCategory(catId, null, contactId, null,null,"areashortCode","location").Tables[1];
+                dtContact = objUserDetails.GetSubCategory(catId, null, contactId, null, null, "areashortCode", "location").Tables[1];
                 IList<SubCategory> items = dtContact.AsEnumerable().Select(row =>
                     new SubCategory
                     {
@@ -1726,10 +1733,10 @@ namespace StubAPI.Controllers
                     DataTable dtlocation = new DataTable();
                     DataTable dtDeviceUIDList = new DataTable();
                     dtDeviceDetails = objUserDetails.GetSourcesToken().Tables[0];
-                    dtDeviceUIDList= objUserDetails.GetSourcesToken().Tables[1];
+                    dtDeviceUIDList = objUserDetails.GetSourcesToken().Tables[1];
                     dtlocation = objUserDetails.GetLocation(null, "", objRequestSugg.location, objRequestSugg.cityId, "areaShortCode");
-                    int ? locID = Convert.ToInt32(dtlocation.Rows[0]["LocationId"]);
-                    PushAndroidNotification(Convert.ToString(dtDeviceDetails.Rows[0]["TokenList"]), Convert.ToInt32(objRequestSugg.categoryId), Convert.ToInt32(objRequestSugg.subCategoryId), Convert.ToInt32(objRequestSugg.microcategoryId), locID, "Suggestion Request", objRequestSugg.comments,Convert.ToString(dtDeviceUIDList.Rows[0]["UIDList"]));
+                    int? locID = Convert.ToInt32(dtlocation.Rows[0]["LocationId"]);
+                    PushAndroidNotification(Convert.ToString(dtDeviceDetails.Rows[0]["TokenList"]), Convert.ToInt32(objRequestSugg.categoryId), Convert.ToInt32(objRequestSugg.subCategoryId), Convert.ToInt32(objRequestSugg.microcategoryId), locID, "Suggestion Request", objRequestSugg.comments, Convert.ToString(dtDeviceUIDList.Rows[0]["UIDList"]));
                     custMessage.action = "Success";
                     custMessage.message = "Record added successfully!.";
                 }
@@ -1783,7 +1790,7 @@ namespace StubAPI.Controllers
             {
                 //System.Configuration.ConfigurationManager.AppSettings["RegKey"];
                 string applicationID = System.Configuration.ConfigurationManager.AppSettings["RegKey"]; //"AAAAS7HcV0s:APA91bF436VQayZCb-O3blmqqovG-8ttC78jbyPVUXmgOrvCNRU8A94CWqg20lsamKjxcU2k5iPTnn2oiGJ6_hVWprBhXLD_3NtZZwDz7-0utoLGprkzIm06OYR2zn43m4qGkS5V-Jep";
-                HttpWebRequest tRequest =(HttpWebRequest)WebRequest.Create(api);
+                HttpWebRequest tRequest = (HttpWebRequest)WebRequest.Create(api);
                 tRequest.Method = "post";
                 tRequest.ContentType = "application/json";
 
@@ -1800,7 +1807,7 @@ namespace StubAPI.Controllers
                     dataStream.Write(byteArray, 0, byteArray.Length);
                     using (HttpWebResponse tResponse = (HttpWebResponse)tRequest.GetResponse())
                     {
-                       
+
                         using (Stream dataStreamResponse = tResponse.GetResponseStream())
                         {
 
@@ -1957,21 +1964,21 @@ namespace StubAPI.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, custMessage);
         }
-        public ViewData GetDataForNotification(int? locid, int? catid, int? subcateid, int? mid, string scName, string Cname, string locName, string mcName, string addedBy, string addedwhen, string target, string redirectTo,int ? suggestionId, int ? redirectToType)
+        public ViewData GetDataForNotification(int? locid, int? catid, int? subcateid, int? mid, string scName, string Cname, string locName, string mcName, string addedBy, string addedwhen, string target, string redirectTo, int? suggestionId, int? redirectToType)
         {
             ViewData objViewData = new ViewData();
             objViewData.LocationId = locid;
             objViewData.CatId = catid;
             objViewData.SubCatId = subcateid;
             objViewData.MCId = mid;
-            objViewData.SubCategoryName = !string.IsNullOrEmpty(scName)? scName : null;
+            objViewData.SubCategoryName = !string.IsNullOrEmpty(scName) ? scName : null;
             objViewData.CategoryName = !string.IsNullOrEmpty(Cname) ? Cname : null;
             objViewData.LocationName = !string.IsNullOrEmpty(locName) ? locName : null;
             objViewData.MCName = !string.IsNullOrEmpty(mcName) ? mcName : null;
             objViewData.addedBy = !string.IsNullOrEmpty(addedBy) ? addedBy : null;
             objViewData.addedWhen = !string.IsNullOrEmpty(addedwhen) ? addedwhen : null;
             objViewData.target = !string.IsNullOrEmpty(target) ? target : null;
-            objViewData.redirectTo = !string.IsNullOrEmpty(redirectTo)? redirectTo : null;
+            objViewData.redirectTo = !string.IsNullOrEmpty(redirectTo) ? redirectTo : null;
             objViewData.redirectToType = redirectToType;
             objViewData.suggestionId = suggestionId;
             return objViewData;
@@ -1986,20 +1993,20 @@ namespace StubAPI.Controllers
             UserDetailsWeb objUserDetails = new UserDetailsWeb();
             try
             {
-               
+
                 dtLocation = objUserDetails.GetNotifications(contactId, deviceId);
                 IList<NotificationDetails> items = dtLocation.AsEnumerable().Select(row =>
                  new NotificationDetails
                  {
-                     
+
                      notificationID = row.Field<int?>("UID"),
-                     notificationType =!string.IsNullOrEmpty(row.Field<string>("NotificationType"))? row.Field<string>("NotificationType") : null,
+                     notificationType = !string.IsNullOrEmpty(row.Field<string>("NotificationType")) ? row.Field<string>("NotificationType") : null,
                      notificationTitle = !string.IsNullOrEmpty(row.Field<string>("NotificationTitle")) ? row.Field<string>("NotificationTitle") : null,
                      text = row.Field<string>("Text"),
-                     notificationPhoto = !string.IsNullOrEmpty(row.Field<string>("NotificationPhoto"))? (row.Field<string>("NotificationPhoto").Contains("http://tagaboutit.com") ? row.Field<string>("NotificationPhoto"):null ): null,
+                     notificationPhoto = !string.IsNullOrEmpty(row.Field<string>("NotificationPhoto")) ? (row.Field<string>("NotificationPhoto").Contains("http://tagaboutit.com") ? row.Field<string>("NotificationPhoto") : null) : null,
                      timeSent = !string.IsNullOrEmpty(row.Field<string>("TimeSent")) ? row.Field<string>("TimeSent") : null,
 
-                     data = GetDataForNotification(row.Field<int?>("LocationId"), row.Field<int?>("CatId"), row.Field<int?>("SubCategoryId"), row.Field<int?>("MicrocategoryId"), row.Field<string>("SubCategoryName"), row.Field<string>("CategoryName"), row.Field<string>("LocationName"), row.Field<string>("MCName"), row.Field<string>("AddedBy"), row.Field<string>("AddedWhen"), row.Field<string>("Target"), row.Field<string>("RedirectTo"), row.Field<int?>("SuggestionId"),  row.Field<int?>("RedirectToType"))
+                     data = GetDataForNotification(row.Field<int?>("LocationId"), row.Field<int?>("CatId"), row.Field<int?>("SubCategoryId"), row.Field<int?>("MicrocategoryId"), row.Field<string>("SubCategoryName"), row.Field<string>("CategoryName"), row.Field<string>("LocationName"), row.Field<string>("MCName"), row.Field<string>("AddedBy"), row.Field<string>("AddedWhen"), row.Field<string>("Target"), row.Field<string>("RedirectTo"), row.Field<int?>("SuggestionId"), row.Field<int?>("RedirectToType"))
 
 
                  }).ToList();
@@ -2146,11 +2153,11 @@ namespace StubAPI.Controllers
                  new FilterOptions
                  {
                      sequienceId = row.Field<int>("sequienceId"),
-                     ddValue = row.Field<string>("ddValue"),                  
+                     ddValue = row.Field<string>("ddValue"),
                      ddText = row.Field<string>("ddText"),
                      filterType = row.Field<string>("filterType"),
                      isSelected = row.Field<bool>("isSelected"),
-                     cityId= row.Field<Int16>("cityID")
+                     cityId = row.Field<Int16>("cityID")
                  }).ToList();
                 if (items.Count > 0)
                 {
@@ -2182,7 +2189,7 @@ namespace StubAPI.Controllers
         [Route("api/getsectioncategorywithcount/{contactNumber=contactNumber}/{suburb=suburb}/{areaCode=areaCode}/{cityId=cityId}/{uniqueCount=uniqueCount}")]
         [AuthorizationRequired]
         [HttpGet]
-        public HttpResponseMessage GetSCWithCount(string contactNumber, string suburb, string areaCode, int ? cityId, bool uniqueCount)
+        public HttpResponseMessage GetSCWithCount(string contactNumber, string suburb, string areaCode, int? cityId, bool uniqueCount)
         {
             SuggestionCounts objSuggCount = new SuggestionCounts();
 
@@ -2201,7 +2208,7 @@ namespace StubAPI.Controllers
                      subCatId = row.Field<int?>("SubCatId"),
                      categoryName = row.Field<string>("CName"),
                      suggCount = row.Field<int?>("SugCnt"),
-                     microCategoryToolTip= row.Field<string>("microCategoryToolTip"),
+                     microCategoryToolTip = row.Field<string>("microCategoryToolTip"),
                      commentsToolTip = row.Field<string>("commentsToolTip"),
                      isLocal = row.Field<bool>("isLocal")
 
@@ -2218,7 +2225,7 @@ namespace StubAPI.Controllers
                        suggCount = row.Field<int?>("SugCnt")
                    }).ToList();
                     objSuggCount.SectionCountData = sectionItem;
-                }           
+                }
 
                 custResponse.action = "success";
                 custResponse.message = "";

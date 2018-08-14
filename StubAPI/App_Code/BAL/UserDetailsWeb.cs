@@ -247,7 +247,7 @@ namespace StubAPI.BAL
             return dtuserDtails;
         }
 
-        public DataSet GetCategory(int? catid, int? contactId, bool? isRequest, int ? cityId, string areashortCode,string location)
+        public DataSet GetCategory(int? catid, int? contactId, bool? isRequest, int ? cityId, string areaShortCode, string location)
         {
             DataSet dtuserDtails = new DataSet();
 
@@ -259,12 +259,12 @@ namespace StubAPI.BAL
                 parameters[1] = new SqlParameter("@ContactId", contactId);
                 parameters[2] = new SqlParameter("@IsRequest", isRequest == null ? false : isRequest);
                 parameters[3] = new SqlParameter("@CityId", cityId);
-                if(areashortCode== "areashortCode")
+                if(areaShortCode == "areaShortCode")
                     parameters[4] = new SqlParameter("@ASC", DBNull.Value);
                 else
-                    parameters[4] = new SqlParameter("@ASC", areashortCode);
+                    parameters[4] = new SqlParameter("@ASC", areaShortCode);
 
-                if(location== "location")
+                if(location == "location")
                     parameters[5] = new SqlParameter("@Location", DBNull.Value);
                 else
                     parameters[5] = new SqlParameter("@Location", location);
@@ -695,7 +695,7 @@ namespace StubAPI.BAL
             }
             return dtuserDtails;
         }
-        public DataTable GetSoruce(int? sourceID, string name)
+        public DataTable GetSoruce(int? sourceID, string name, bool ? isInterns)
         {
             DataTable dtuserDtails = new DataTable();
 
@@ -704,7 +704,7 @@ namespace StubAPI.BAL
                 string spName = "spGetSoruce";
                 SqlParameter[] parameters = new SqlParameter[3];
                 parameters[0] = new SqlParameter("@SourceId", sourceID);
-                parameters[1] = new SqlParameter("@IsInters", DBNull.Value);
+                parameters[1] = new SqlParameter("@IsInters", isInterns);
                 if (name == "name")
                 {
                     parameters[2] = new SqlParameter("@Name", DBNull.Value);
@@ -728,7 +728,7 @@ namespace StubAPI.BAL
             }
             return dtuserDtails;
         }
-        public DataSet GetSubCategory(int? catid, int? subcatId, int? contactId, bool? isRequest,int ? cityId,string areashortCode, string location)
+        public DataSet GetSubCategory(int? catid, int? subcatId, int? contactId, bool? isRequest,int ? cityId,string areaShortCode, string location)
         {
             DataSet dtuserDtails = new DataSet();
 
@@ -743,10 +743,10 @@ namespace StubAPI.BAL
                 parameters[2] = new SqlParameter("@ContactId", contactId);
                 parameters[3] = new SqlParameter("@IsRequest", isRequest == null ? false : isRequest);
                 parameters[4] = new SqlParameter("@CityId", cityId);
-                if (areashortCode == "areashortCode")
+                if (areaShortCode == "areaShortCode")
                     parameters[5] = new SqlParameter("@ASC", DBNull.Value);
                 else
-                    parameters[5] = new SqlParameter("@ASC", areashortCode);
+                    parameters[5] = new SqlParameter("@ASC", areaShortCode);
 
                 if (location == "location")
                     parameters[6] = new SqlParameter("@Location", DBNull.Value);

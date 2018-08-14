@@ -60,7 +60,7 @@ namespace StubAPI.Controllers
                 if (usDetails.SaveUsers(ApiRequestModel.MobileNumber, ApiRequestModel.Email, ApiRequestModel.Password, ApiRequestModel.FirstName, ApiRequestModel.LastName, ApiRequestModel.Source))
                 {
 
-                    ActivityLogger.ActivityLog("xyz", "PostUser called");
+                    //ActivityLogger.ActivityLog("xyz", "PostUser called");
                     errorMessage = "User record added successfuly.";
                 }
                 else
@@ -81,7 +81,7 @@ namespace StubAPI.Controllers
             dtUser = usDetails.Login(ApiRequestModel.UserId, ApiRequestModel.Password);
             if(dtUser.Rows.Count>0)
             {
-                ActivityLogger.ActivityLog("xyz", ApiRequestModel.UserId+" User Login ");
+               // ActivityLogger.ActivityLog("xyz", ApiRequestModel.UserId+" User Login ");
                 errorMessage = "Logged in successfuly.";
             }          
             return errorMessage;
@@ -95,7 +95,7 @@ namespace StubAPI.Controllers
             UserDetails usDetails = new UserDetails();          
             if (usDetails.UpdatePassword(ApiRequestModel.UserId, ApiRequestModel.Password))
             {
-                ActivityLogger.ActivityLog("xyz", ApiRequestModel.UserId + " User  details Updated ");
+                //ActivityLogger.ActivityLog("xyz", ApiRequestModel.UserId + " User  details Updated ");
                 errorMessage = "Record Updated successfuly.";
             }
             else
@@ -137,7 +137,7 @@ namespace StubAPI.Controllers
                 if (usDetails.SaveUserDetails(xmlUserDetails, ApiRequestModel.Source, ApiRequestModel.UID))
                 {
                    
-                    ActivityLogger.ActivityLog("xyz", "PostUserDetails called");
+                  //  ActivityLogger.ActivityLog("xyz", "PostUserDetails called");
                     errorMessage = "User record added successfuly.";
                 }
                 else
@@ -188,7 +188,7 @@ namespace StubAPI.Controllers
                 string xmlUserDetails = ToXML(ApiRequestModel);
                 if (usDetails.SaveUserBusinessDetails(xmlUserDetails, defaultUserValue))
                 {
-                    ActivityLogger.ActivityLog("xyz", "PostUserDetails called");
+                    //ActivityLogger.ActivityLog("xyz", "PostUserDetails called");
                     errorMessage = "User business record added successfuly.";
                 }
                 else
@@ -212,7 +212,7 @@ namespace StubAPI.Controllers
                 if (usDetails.SaveFOFUserDetails(ApiRequestModel.UserId, ApiRequestModel.FOF, ApiRequestModel.MyContacts, ApiRequestModel.NotifyTags, ApiRequestModel.BlockNonRecoTill))
                 {
 
-                    ActivityLogger.ActivityLog("xyz", "PostFOFDetails called");
+                   // ActivityLogger.ActivityLog("xyz", "PostFOFDetails called");
                     errorMessage = "User record updated successfuly.";
                 }
                 else

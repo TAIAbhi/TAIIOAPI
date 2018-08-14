@@ -20,7 +20,7 @@
                 exceptionMessage = actionExecutedContext.Exception.InnerException.Message;
             }
 
-            ActivityLogger.ActivityLog("xyz", "Error:" + exceptionMessage);
+            //ActivityLogger.ActivityLog("xyz", "Error:" + exceptionMessage);
             //We can log this exception message
             var response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
             {
