@@ -19,7 +19,7 @@ namespace StubAPI.BAL
             int noOfEffectedRows = 0;
             try
             {
-                string spName = "spActivityLog_ActivityLogSave";
+                string spName = "spActivityLog";
                 SqlParameter[] parameters = new SqlParameter[7];
                 parameters[0] = new SqlParameter("@Platform", platform);
                 parameters[1] = new SqlParameter("@IPAddress", ipAdd);

@@ -38,6 +38,7 @@ namespace StubAPI.Controllers
             custResponse.action = "failure";
             custResponse.message = "Invalid user login Id.Please provide valid login details.";
             string msg = string.Empty;
+            byte? platform = null;
             try
             {
                 if (!string.IsNullOrEmpty(objSourcePram.loginId.Trim()) && !string.IsNullOrEmpty(objSourcePram.password.Trim()))
@@ -100,7 +101,6 @@ namespace StubAPI.Controllers
                                 objTokenResponse.authToken = objToken.authToken;
                                 objTokenResponse.loginDetails = objSource;
 
-                                byte? platform = null;
                                 if (objSource.platform != null)
                                 {
                                     platform = Convert.ToByte(objSource.platform);
@@ -113,6 +113,7 @@ namespace StubAPI.Controllers
                             else
                             {
                                 //objSource.ErrorMessage = "Invalid user login.Please provide valid login details.";
+                                ActivityLogger.ActivityLog(platform, "", "Login", "Login", "1 Invalid user login.Please provide valid login details.", true, objSource.contactId);
                                 custResponse.action = "failure";
                                 custResponse.message = "Invalid user login.Please provide valid login details.";
                                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, custResponse);
@@ -120,6 +121,7 @@ namespace StubAPI.Controllers
                         }
                         else
                         {
+                            ActivityLogger.ActivityLog(platform, "", "Login", "Login", "2 Invalid user login.Please provide valid login details.", true, objSource.contactId);
                             //objSource.ErrorMessage = "Invalid user mobile number. Not a number :-" + loginId;
                             custResponse.action = "failure";
                             custResponse.message = "Invalid user login Id.Please provide valid login details.";
@@ -128,6 +130,7 @@ namespace StubAPI.Controllers
                     }
                     else
                     {
+                        ActivityLogger.ActivityLog(platform, "", "Login", "Login", "Invalid user mobile number", true, objSource.contactId);
                         //objSource.ErrorMessage = "Invalid user mobile number. :-" + loginId;
                         custResponse.action = "failure";
                         custResponse.message = "Invalid user mobile number";
@@ -138,6 +141,7 @@ namespace StubAPI.Controllers
             }
             catch (Exception ex)
             {
+                ActivityLogger.ActivityLog(platform, "", "Login", "Login", ex.Message, true, objSource.contactId);
                 custResponse.action = "failure";
                 custResponse.message = ex.Message;
                 SendEmail(ex.Message, "Login");
@@ -322,6 +326,9 @@ namespace StubAPI.Controllers
         [HttpGet]
         public HttpResponseMessage GetLocation(string query, int? cityId, int? locationId, string AreaShortCode)
         {
+            //string token = string.Empty;
+            //token = Request.Headers.GetValues("Token").First();
+
             CustomDataResponseMessage custResponse = new CustomDataResponseMessage();
             DataTable dtLocation = new DataTable();
             if (query == "query")
@@ -370,14 +377,13 @@ namespace StubAPI.Controllers
             }
             catch (Exception ex)
             {
-
+                ActivityLogger.ActivityLog(null, "", "Location", "GetLocation", "Location" + query + "#" + cityId.ToString() + "#" + locationId.ToString() + "#" + AreaShortCode, true, 0); //contactId
                 custResponse.action = "failure";
                 custResponse.message = ex.Message;
                 custResponse.data = null;
                 SendEmail(ex.Message, "location");
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, custResponse);
             }
-
 
 
             return Request.CreateResponse(HttpStatusCode.OK, custResponse);
@@ -506,16 +512,17 @@ namespace StubAPI.Controllers
                 {
                     Int64 isNumber = 0;
                     Int64.TryParse(contactSugg.businessContact, out isNumber);
-                    if (contactSugg.businessContact.Length == 10 && isNumber > 0)
+                    if (contactSugg.businessContact.Length >= 10 && isNumber > 0)
                     {
                         if (objUserDetails.SaveContactSuggestions(objContactSugg.sourceId, contactSugg.contactId, contactSugg.catId.ToString(), contactSugg.subCategoryId.ToString(), contactSugg.microcategory, contactSugg.businessName, contactSugg.citiLevelBusiness, contactSugg.businessContact, contactSugg.location, contactSugg.locationId, contactSugg.areaShortCode, contactSugg.comments, "", contactSugg.location4, contactSugg.location5, contactSugg.location6, contactSugg.contactComments, contactSugg.isAChain, contactSugg.platForm, contactSugg.city, contactSugg.requestID, contactSugg.usedTagSuggetion))
                         {
-
+                            ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "AddSugg", "AddSugg", "AddSugg : " + contactSugg.businessName + "#" + contactSugg.businessContact + "#" + contactSugg.microcategory != null? contactSugg.microcategory : contactSugg.subCategory + "#" + contactSugg.location + "#" + contactSugg.usedTagSuggetion.ToString() + "#" + contactSugg.comments + "#" + contactSugg.isAChain.ToString() + "#" + contactSugg.citiLevelBusiness.ToString() + "#" + contactSugg.city.ToString(), false, contactSugg.contactId);
                             custMessage.action = "Success";
                             custMessage.message = "Suggestion Added Successfully!.";
                         }
                         else
                         {
+                            ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "AddSugg", "AddSugg", "Failed : Please choose different Business Name and Location. AddSugg: " + contactSugg.businessName + "#" + contactSugg.businessContact + "#" + contactSugg.microcategory != null? contactSugg.microcategory : contactSugg.subCategory + "#" + contactSugg.location + "#" + contactSugg.usedTagSuggetion.ToString() + "#" + contactSugg.comments + "#" + contactSugg.isAChain.ToString() + "#" + contactSugg.citiLevelBusiness.ToString() + "#" + contactSugg.city.ToString(), true, contactSugg.contactId);
                             custMessage.action = "Failure";
                             custMessage.message = "Please choose different Business Name and Location!.";
                             return Request.CreateResponse(HttpStatusCode.ExpectationFailed, custMessage);
@@ -523,6 +530,7 @@ namespace StubAPI.Controllers
                     }
                     else
                     {
+                        ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "AddSugg", "AddSugg", "Invalid Business contact number! AddSugg: " + contactSugg.businessName + "#" + contactSugg.businessContact + "#" + contactSugg.microcategory != null ? contactSugg.microcategory : contactSugg.subCategory + "#" + contactSugg.location + "#" + contactSugg.usedTagSuggetion.ToString() + "#" + contactSugg.comments + "#" + contactSugg.isAChain.ToString() + "#" + contactSugg.citiLevelBusiness.ToString() + "#" + contactSugg.city.ToString(), true, contactSugg.contactId);
                         custMessage.action = "Failure";
                         custMessage.message = "Invalid Business contact number!";
                         return Request.CreateResponse(HttpStatusCode.ExpectationFailed, custMessage);
@@ -532,12 +540,13 @@ namespace StubAPI.Controllers
                 {
                     if (objUserDetails.SaveContactSuggestions(objContactSugg.sourceId, contactSugg.contactId, contactSugg.catId.ToString(), contactSugg.subCategoryId.ToString(), contactSugg.microcategory, contactSugg.businessName, contactSugg.citiLevelBusiness, contactSugg.businessContact, contactSugg.location, contactSugg.locationId, contactSugg.areaShortCode, contactSugg.comments, "", contactSugg.location4, contactSugg.location5, contactSugg.location6, contactSugg.contactComments, contactSugg.isAChain, contactSugg.platForm, contactSugg.city, contactSugg.requestID, contactSugg.usedTagSuggetion))
                     {
-
+                        ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "AddSugg", "AddSugg", "AddSugg : " + contactSugg.businessName + "#" + contactSugg.businessContact + "#" + contactSugg.microcategory != null ? contactSugg.microcategory : contactSugg.subCategory + "#" + contactSugg.location + "#" + contactSugg.usedTagSuggetion.ToString() + "#" + contactSugg.comments + "#" + contactSugg.isAChain.ToString() + "#" + contactSugg.citiLevelBusiness.ToString() + "#" + contactSugg.city.ToString(), false, contactSugg.contactId);
                         custMessage.action = "Success";
                         custMessage.message = "Suggestion Added Successfully!.";
                     }
                     else
                     {
+                        ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "AddSugg", "AddSugg", "Failed : Please choose different Business Name and Location. AddSugg: " + contactSugg.businessName + "#" + contactSugg.businessContact + "#" + contactSugg.microcategory != null ? contactSugg.microcategory : contactSugg.subCategory + "#" + contactSugg.location + "#" + contactSugg.usedTagSuggetion.ToString() + "#" + contactSugg.comments + "#" + contactSugg.isAChain.ToString() + "#" + contactSugg.citiLevelBusiness.ToString() + "#" + contactSugg.city.ToString(), true, contactSugg.contactId);
                         custMessage.action = "Failure";
                         custMessage.message = "Please choose different Business Name and Location!.";
                         return Request.CreateResponse(HttpStatusCode.ExpectationFailed, custMessage);
@@ -546,7 +555,7 @@ namespace StubAPI.Controllers
             }
             catch (Exception ex)
             {
-
+                ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "AddSugg", "AddSugg", "AddSugg: " + contactSugg.businessName + "#" + contactSugg.businessContact + "#" + contactSugg.microcategory != null ? contactSugg.microcategory : contactSugg.subCategory + "#" + contactSugg.location + "#" + contactSugg.usedTagSuggetion.ToString() + "#" + contactSugg.comments + "#" + contactSugg.isAChain.ToString() + "#" + contactSugg.citiLevelBusiness.ToString() + "#" + contactSugg.city.ToString() + ex.Message, true, contactSugg.contactId);
                 custMessage.action = "failure";
                 custMessage.message = ex.Message;
                 SendEmail(ex.Message, "suggestion POST");
@@ -634,14 +643,14 @@ namespace StubAPI.Controllers
 
         }
 
-        [Route("api/getrequestsuggestion/{catId=catId}/{subCatId=subCatId}/{sugId=sugId}/{contactId=contactId}/{getall=getall}/{sourceId=sourceId}/{businessName=businessName}/{isLocal=isLocal}/{location=location}/{microcate=microcate}/{pageSize=pageSize}/{pageNumber=pageNumber}/{microName=microName}/{cityId=cityId}")]
+        [Route("api/getrequestsuggestion/{catId=catId}/{subCatId=subCatId}/{sugId=sugId}/{contactId=contactId}/{sourceId=sourceId}/{businessName=businessName}/{isLocal=isLocal}/{location=location}/{microcate=microcate}/{pageSize=pageSize}/{pageNumber=pageNumber}/{microName=microName}/{cityId=cityId}")]
         [HttpGet]
         [AuthorizationRequired]
-        public HttpResponseMessage GetRequestSuggestion(int? catId, int? subCatId, int? sugId, int? contactId, int? getall, int? sourceId, string businessName, bool? isLocal, string location, int? microcate, int? pageSize, int? pageNumber, string microName, int? cityId)
+        public HttpResponseMessage GetRequestSuggestion(int? catId, int? subCatId, int? sugId, int? contactId, int? sourceId, string businessName, bool? isLocal, string location, int? microcate, int? pageSize, int? pageNumber, string microName, int? cityId)
         {
             int totalNumberofRow = 0;
             string token = string.Empty;
-            if (contactId == null && getall == null)
+            if (contactId == null)
             {
                 token = Request.Headers.GetValues("Token").First();
             }
@@ -804,11 +813,11 @@ namespace StubAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, custResponse);
         }
 
-        [Route("api/getsuggestionwithcount/{catId=catId}/{subCatId=subCatId}/{sugId=sugId}/{contactId=contactId}/{getall=getall}/{sourceId=sourceId}/{businessName=businessName}/{isLocal=isLocal}/{location=location}/{microcate=microcate}/{pageSize=pageSize}/{pageNumber=pageNumber}/{microName=microName}/{cityId=cityId}/{areaShortCode=areaShortCode}")]
+        [Route("api/getsuggestionwithcount/{catId=catId}/{subCatId=subCatId}/{sugId=sugId}/{contactId=contactId}/{sourceId=sourceId}/{businessName=businessName}/{isLocal=isLocal}/{location=location}/{microcate=microcate}/{pageSize=pageSize}/{pageNumber=pageNumber}/{microName=microName}/{cityId=cityId}/{areaShortCode=areaShortCode}")]
         [HttpGet]
         [AuthorizationRequired]
         [CustomExceptionFilter]
-        public HttpResponseMessage SuggestionWithCount(int? catId, int? subCatId, int? sugId, int? contactId, int? getall, int? sourceId, string businessName, bool? isLocal, string location, int? microcate, int pageSize, int pageNumber, string microName, int? cityId, string areaShortCode)
+        public HttpResponseMessage SuggestionWithCount(int? catId, int? subCatId, int? sugId, int? contactId, int? sourceId, string businessName, bool? isLocal, string location, int? microcate, int pageSize, int pageNumber, string microName, int? cityId, string areaShortCode)
         {
             int totalNumberofRow = 0;
             string token = string.Empty;
@@ -983,11 +992,15 @@ namespace StubAPI.Controllers
                     UserDetailsWeb objUserDetails = new UserDetailsWeb();
                     if (objUserDetails.UpdateContact(contactSugg.contactId, contactSugg.location1, contactSugg.location2, contactSugg.location3, contactSugg.comments, contactSugg.contactLevelUnderstanding, contactSugg.notification, contactSugg.isContactDetailsAdded, contactSugg.platform, contactSugg.allowProvideSuggestion))
                     {
+                        ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "MyDetails", "UpdateMyDetails", 
+                            "UpdateMyDetails: " + contactSugg.location1 + "#" + contactSugg.location2 + "#" + contactSugg.location3 + "#" + contactSugg.comments + "#" + contactSugg.contactLevelUnderstanding.ToString() + "#" + contactSugg.notification.ToString() + "#" + contactSugg.isContactDetailsAdded.ToString() + "#" + contactSugg.platform.ToString() + "#" + contactSugg.allowProvideSuggestion.ToString(), false, contactSugg.contactId);
                         custMessage.action = "Success";
                         custMessage.message = "Contact details updated Successfully!";
                     }
                     else
                     {
+                        ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "MyDetails", "UpdateMyDetails",
+                            "UpdateMyDetails: " + contactSugg.location1 + "#" + contactSugg.location2 + "#" + contactSugg.location3 + "#" + contactSugg.comments + "#" + contactSugg.contactLevelUnderstanding.ToString() + "#" + contactSugg.notification.ToString() + "#" + contactSugg.isContactDetailsAdded.ToString() + "#" + contactSugg.platform.ToString() + "#" + contactSugg.allowProvideSuggestion.ToString() + "# Could not Updated, please check data and submit again!", true, contactSugg.contactId);
                         custMessage.action = "Failure";
 
                         custMessage.message = "Could not Updated, please check data and submit again!";
@@ -996,7 +1009,8 @@ namespace StubAPI.Controllers
                 }
                 else
                 {
-                    custMessage.action = "Failure";
+                    ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "MyDetails", "UpdateMyDetails",
+                        "UpdateMyDetails: " + contactSugg.location1 + "#" + contactSugg.location2 + "#" + contactSugg.location3 + "#" + contactSugg.comments + "#" + contactSugg.contactLevelUnderstanding.ToString() + "#" + contactSugg.notification.ToString() + "#" + contactSugg.isContactDetailsAdded.ToString() + "#" + contactSugg.platform.ToString() + "#" + contactSugg.allowProvideSuggestion.ToString() + "# Validation failed", true, contactSugg.contactId);
                     custMessage.message = "Validation failed";
                     return Request.CreateResponse(HttpStatusCode.ExpectationFailed, custMessage);
                 }
@@ -1006,6 +1020,8 @@ namespace StubAPI.Controllers
             }
             catch (Exception ex)
             {
+                ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "MyDetails", "UpdateMyDetails",
+                    "UpdateMyDetails: " + contactSugg.location1 + "#" + contactSugg.location2 + "#" + contactSugg.location3 + "#" + contactSugg.comments + "#" + contactSugg.contactLevelUnderstanding.ToString() + "#" + contactSugg.notification.ToString() + "#" + contactSugg.isContactDetailsAdded.ToString() + "#" + contactSugg.platform.ToString() + "#" + contactSugg.allowProvideSuggestion.ToString() + "# " + ex.Message, true, contactSugg.contactId);
 
                 custMessage.action = "Failure";
                 custMessage.message = ex.Message;
@@ -1038,11 +1054,15 @@ namespace StubAPI.Controllers
                         }
                         if (objUserDetails.SaveContact(contactSugg.sourceId, contactSugg.contactName, contactSugg.contactNumber, contactSugg.location1, contactSugg.location2, contactSugg.location3, contactSugg.comments, contactSugg.contactLevelUnderstanding, contactSugg.notification, contactSugg.isContactDetailsAdded, contactSugg.platform, contactSugg.allowProvideSuggestion))
                         {
+                            ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "MyDetails", "AddContact",
+                                "AddContact: " + contactSugg.location1 + "#" + contactSugg.location2 + "#" + contactSugg.location3 + "#" + contactSugg.comments + "#" + contactSugg.contactLevelUnderstanding.ToString() + "#" + contactSugg.notification.ToString() + "#" + contactSugg.isContactDetailsAdded.ToString() + "#" + contactSugg.platform.ToString() + "#" + contactSugg.allowProvideSuggestion.ToString(), false, contactSugg.contactId);
                             custMessage.action = "Success";
                             custMessage.message = "Contact details added Successfully!";
                         }
                         else
                         {
+                            ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "MyDetails", "AddContact",
+                                "AddContact: " + contactSugg.location1 + "#" + contactSugg.location2 + "#" + contactSugg.location3 + "#" + contactSugg.comments + "#" + contactSugg.contactLevelUnderstanding.ToString() + "#" + contactSugg.notification.ToString() + "#" + contactSugg.isContactDetailsAdded.ToString() + "#" + contactSugg.platform.ToString() + "#" + contactSugg.allowProvideSuggestion.ToString() + "#1 Could not Add, please check data and submit again!", true, contactSugg.contactId);
                             custMessage.action = "Failure";
                             custMessage.message = "Could not Add, please check data and submit again!";
                             return Request.CreateResponse(HttpStatusCode.ExpectationFailed, custMessage);
@@ -1050,6 +1070,8 @@ namespace StubAPI.Controllers
                     }
                     else
                     {
+                        ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "MyDetails", "AddContact",
+                            "AddContact: " + contactSugg.location1 + "#" + contactSugg.location2 + "#" + contactSugg.location3 + "#" + contactSugg.comments + "#" + contactSugg.contactLevelUnderstanding.ToString() + "#" + contactSugg.notification.ToString() + "#" + contactSugg.isContactDetailsAdded.ToString() + "#" + contactSugg.platform.ToString() + "#" + contactSugg.allowProvideSuggestion.ToString() + "#2 Could not Add, please check data and submit again!", true, contactSugg.contactId);
                         custMessage.action = "Failure";
                         custMessage.message = "Could not Add, please check data and submit again!";
                         return Request.CreateResponse(HttpStatusCode.ExpectationFailed, custMessage);
@@ -1057,6 +1079,8 @@ namespace StubAPI.Controllers
                 }
                 else
                 {
+                    ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "MyDetails", "AddContact",
+                        "AddContact: " + contactSugg.location1 + "#" + contactSugg.location2 + "#" + contactSugg.location3 + "#" + contactSugg.comments + "#" + contactSugg.contactLevelUnderstanding.ToString() + "#" + contactSugg.notification.ToString() + "#" + contactSugg.isContactDetailsAdded.ToString() + "#" + contactSugg.platform.ToString() + "#" + contactSugg.allowProvideSuggestion.ToString() + "# Validation failed", true, contactSugg.contactId);
                     custMessage.action = "Failure";
                     custMessage.message = "Validation failed";
                     return Request.CreateResponse(HttpStatusCode.ExpectationFailed, custMessage);
@@ -1067,7 +1091,8 @@ namespace StubAPI.Controllers
             }
             catch (Exception ex)
             {
-
+                ActivityLogger.ActivityLog(Convert.ToByte(contactSugg.platform != null ? contactSugg.platform : 0), "", "MyDetails", "AddContact",
+                    "AddContact: " + contactSugg.location1 + "#" + contactSugg.location2 + "#" + contactSugg.location3 + "#" + contactSugg.comments + "#" + contactSugg.contactLevelUnderstanding.ToString() + "#" + contactSugg.notification.ToString() + "#" + contactSugg.isContactDetailsAdded.ToString() + "#" + contactSugg.platform.ToString() + "#" + contactSugg.allowProvideSuggestion.ToString() + "#" + ex.Message, true, contactSugg.contactId);
                 custMessage.action = "Failure";
                 custMessage.message = ex.Message;
                 SendEmail(ex.Message, "me POST Add Contact");
@@ -1362,6 +1387,8 @@ namespace StubAPI.Controllers
             ContactSuggestions objContact = new ContactSuggestions();
             UserDetailsWeb objUserDetails = new UserDetailsWeb();
             DataTable dtContact = new DataTable();
+            int contcactId = 0;
+            int? platform = 0;
             try
             {
                 dtContact = objUserDetails.GetContacts(Convert.ToInt32(contactId), null, token, "name");
@@ -1406,9 +1433,12 @@ namespace StubAPI.Controllers
 
                 if (items.Count > 0)
                 {
+                    ActivityLogger.ActivityLog(Convert.ToByte(platform != null ? platform : 0), "", "MyDetails", "ViewContact", "ViewContact", false, contcactId);
                     custResponse.action = "success";
                     custResponse.message = "";
                     custResponse.data = contact;
+                    contcactId = contact.contactId;
+                    platform = contact.platform;
                 }
                 else
                 {
@@ -1420,7 +1450,7 @@ namespace StubAPI.Controllers
             }
             catch (Exception ex)
             {
-
+                ActivityLogger.ActivityLog(Convert.ToByte(platform != null ? platform : 0), "", "MyDetails", "AddContact", "ViewContact: " + ex.Message, true, contcactId);
                 custResponse.action = "Failure";
                 custResponse.message = ex.Message;
                 custResponse.data = null;
